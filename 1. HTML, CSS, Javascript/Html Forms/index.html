@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Form</title>
+    <style>
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            padding: 5px 30px;
+        }
+
+        h2 {
+            background-color: rgb(64, 175, 98);
+            text-align: center;
+            margin: 00;
+            padding: 5px;
+        }
+
+        .container {
+            margin: 5px 20vw;
+            padding: 5px 15px;
+            background-color: rgb(241, 241, 241);
+            border: 1px solid rgba(0, 0, 0, 0.5);
+        }
+
+        label{
+            padding: 5px;
+            margin: 5px;
+        }
+
+        fieldset{
+            margin: 10px 2px;
+            padding: 2px 20px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="number"],
+        input[type="date"],
+        textarea {
+            margin:2px;
+            width: 100%;
+        }
+
+        .star {
+            color: red;
+        }
+
+        .note {
+            font-size: 12px;
+        }
+
+        input[type="submit"]{
+            font-size: 20px;
+            background-color: rgb(66, 231, 149);
+        }
+        input[type="reset"] {
+            float: right;
+            background-color: crimson;
+            font-size: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <form action="">
+            <h2>Personal Details</h2>
+            <hr>
+            <p class="note"><span class="star">*</span> marked fields are required.</p>
+
+            <label for="name">Name<span class="star">*</span>:</label>
+            <input required type="text" name="name" id="name"><br>
+
+            <label for="doj">Date Of Joining<span class="star">*</span>:</label>
+            <input required type="date" name="doj" id="doj"><br>
+
+            <label for="designation">Designation<span class="star">*</span>:</label>
+            <input required type="text" name="designation" id="designation"><br>
+
+            <label for="fathersname">Father's Name<span class="star">*</span>:</label>
+            <input required type="text" name="fathersname" id="fathersname"><br>
+
+            <label for="dob">Date Of Birth<span class="star">*</span>:</label>
+            <input required type="date" name="dob" id="dob"><br>
+
+            <label for="maritialstatus">Maritial Status<span class="star">*</span>:</label>
+            <input required type="text" name="maritialstatus" id="maritialstatus">
+            <label for="spousesname">Spouse’s Name</label>
+            <input type="text" name="spousesname" id="spousesname"><br>
+
+            <label for="pan">PAN Card Number<span class="star">*</span>:</label>
+            <input required type="text" name="pan" id="pan" minlength="10" maxlength="10"><br>
+            <label for="bankaccnum">Bank Account Number<span class="star">*</span>:</label>
+            <input required type="text" name="bankaccnum" id="bankaccnum"><br>
+            <label for="bankaccname">Bank Account Name<span class="star">*</span>:</label>
+            <input required type="text" name="bankaccname" id="bankaccname"><br>
+
+            <label for="bloodgroup">Blood Group<span class="star">*</span>:</label>
+            <input required type="text" name="bloodgroup" id="bloodgroup" minlength="2" maxlength="3"><br>
+            <fieldset>
+                <legend>Correspondence Address<span class="star">*</span></legend>
+                <label for="corraddress">Address:</label>
+                <textarea required name="corraddress" id="corraddress" cols="40"></textarea>
+                <label for="cpincode">Pincode:</label>
+                <input required type="number" name="cpincode" id="cpincode"><br>
+                <label for="contactnum">Contact Number:</label>
+                <input required type="number" name="contactnum" id="contactnum"><br>
+            </fieldset>
+            <fieldset>
+                <legend>Permanent Address <span class="star">*</span></legend>
+                <label for="permaddress">Permanent Address:</label>
+                <textarea required name="permaddress" id="permaddress" cols="40"></textarea>
+                <label for="ppincode">Pincode:</label>
+                <input required type="number" name="ppincode" id="ppincode"><br>
+                <label for="permcontactnum">Permanent Contact Number:</label>
+                <input required type="number" name="permcontactnum" id="permcontactnum"><br>
+            </fieldset>
+            <label for="email">E-Mail Id<span class="star">*</span>:</label>
+            <input required type="email" name="email" id="email"><br>
+            <br>
+            <input required type="submit" value="SUBMIT">
+            <input type="reset" value="RESET">
+        </form>
+    </div>
+</body>
+
+</html>
