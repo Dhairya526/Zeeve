@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+
+<body>
+    <div id="calculator">
+        <div class="outputScreen">
+            <p class="outputText" id="out1"></p>
+        </div>
+        <div class="inputArea">
+            <div class="numbers">
+                <button onclick="display(1)" class="numberItem" id="number1">1</button>
+                <button onclick="display(2)" class="numberItem" id="number2">2</button>
+                <button onclick="display(3)" class="numberItem" id="number3">3</button>
+                <button onclick="display(4)" class="numberItem" id="number4">4</button>
+                <button onclick="display(5)" class="numberItem" id="number5">5</button>
+                <button onclick="display(6)" class="numberItem" id="number6">6</button>
+                <button onclick="display(7)" class="numberItem" id="number7">7</button>
+                <button onclick="display(8)" class="numberItem" id="number8">8</button>
+                <button onclick="display(9)" class="numberItem" id="number9">9</button>
+                <button onclick="display('.')" class="numberItem" id="decimal">.</button>
+                <button onclick="display(0)" class="numberItem" id="number0">0</button>
+                <button onclick="displayAnswer()" class="numberItem" id="answer">=</button>
+            </div>
+            <div class="operators">
+                <button onclick="clearDisplay()" class="operatorItem" id="backspace">C</button>
+                <button onclick="display('+')" class="operatorItem" id="add">+</button>
+                <button onclick="display('-')" class="operatorItem" id="sub">-</button>
+                <button onclick="display('*')" class="operatorItem" id="mul">*</button>
+                <button onclick="display('/')" class="operatorItem" id="div">/</button>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
