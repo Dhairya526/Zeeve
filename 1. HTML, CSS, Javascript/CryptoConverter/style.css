@@ -1,0 +1,78 @@
+body{
+    padding: 0;
+    margin: 0;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+h1.h1{
+    margin-top: 5vh;
+    text-align: center;
+}
+div.container{
+    border: 2px solid black;
+    padding-top: 10vh;
+    margin: 5vh 5vw;
+    background-color: dodgerblue;
+    text-align: center;
+}
+div.crypto{
+    display: flex;
+}
+.container h2{
+    /* margin-bottom: 1vh; */
+    padding: 0;
+}
+
+.input, .output{
+    padding: 5px;
+    margin: 0vh 2.5vw;
+    border: 1px solid black;
+    background-color: rgb(15, 92, 168);
+    width: 40vw;
+}
+
+.container select{
+    margin-bottom: 1vh;
+    text-align: center;
+    width: 17.5vw;
+    font-size: 80%;
+}
+
+.container input{
+    margin-bottom: 2.5vh;
+    width: 17.5vw;
+    font-size: 80%;
+}
+
+input#outputAmount{
+    background-color: white;
+}
+
+div.exhButton{
+    margin-top: 5vh;
+}
+
+#calcButton{
+    border: 1px solid black;
+    width: 15vw;
+    height: 5vh;
+    background-color: green;
+    color: white;
+}
+#calcButton:hover{
+    background-color: greenyellow;
+    cursor: pointer;
+}
+
+div.usdInr{
+    margin-top: 4vh;
+}
+div.usdInr table{
+    margin: auto;
+    text-align: center;
+}
+
+div.usdInr input{
+    background-color: white;
+    border: none;
+}
+

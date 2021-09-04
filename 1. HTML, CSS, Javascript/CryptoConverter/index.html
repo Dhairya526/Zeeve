@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto Converter</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+
+<body>
+    <h1 class="h1">CRYPTO CONVERTER</h1>
+    <div class="container">
+        <div class="crypto">
+            <div class="input">
+                <h2>From</h2>
+                <select name="inputCrypto" id="inputCrypto">
+                    <option value="">---Select---</option>
+                    <option value="BTC">Bitcoin</option>
+                    <option value="ETH">Ethereum</option>
+                    <option value="DOGE">Dogecoin</option>
+                    <option value="BCH">Bitcoin Cash</option>
+                </select>
+                <br><br>
+                <input type="text" id="inputAmount" placeholder="Enter Amount">
+            </div>
+            <div class="output">
+                <h2>To</h2>
+                <select name="outputCrypto" id="outputCrypto">
+                    <option value="">---Select---</option>
+                    <option id="BTC" value="BTC">Bitcoin</option>
+                    <option id="ETH" value="ETH">Ethereum</option>
+                    <option id="DOGE" value="DOGE">Doge Coin</option>
+                    <option id="BCH" value="BCH">Bitcoin Cash</option>
+                </select>
+                <br><br>
+                <input type="text" id="outputAmount" disabled>
+            </div>
+        </div>
+        <div class="exhButton">
+            <button id="calcButton">Convert</button>
+        </div>
+        <div class="usdInr">
+            <table>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>USD</td>
+                    <td>INR</td>
+                </tr>
+                <tr>
+                    <td id="c1">Crypto 1</td>
+                    <td><input type="text" id="c1Usd" disabled></td>
+                    <td><input type="text" id="c1Inr" disabled></td>
+                </tr>
+                <tr>
+                    <td id="c2">Crypto 2</td>
+                    <td><input type="text" id="c2Usd" disabled></td>
+                    <td><input type="text" id="c2Inr" disabled></td>
+                </tr>
+            </table>
+
+        </div>
+    </div>
+</body>
+
+</html>
