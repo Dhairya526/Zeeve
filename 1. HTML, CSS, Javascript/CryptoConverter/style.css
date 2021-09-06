@@ -51,14 +51,15 @@ div.exhButton{
     margin-top: 5vh;
 }
 
-#calcButton{
+#rfButton{
+    font-size: 3vh;
     border: 1px solid black;
     width: 15vw;
     height: 5vh;
     background-color: green;
     color: white;
 }
-#calcButton:hover{
+#rfButton:hover{
     background-color: greenyellow;
     cursor: pointer;
 }

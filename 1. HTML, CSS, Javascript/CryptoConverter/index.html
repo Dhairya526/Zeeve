@@ -6,10 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Crypto Converter</title>
     <link rel="stylesheet" href="style.css">
-    <script src="script.js" defer></script>
+    <script src="script1.js" defer></script>
 </head>
 
-<body>
+<body onload="fetchData()">
     <h1 class="h1">CRYPTO CONVERTER</h1>
     <div class="container">
         <div class="crypto">
@@ -31,7 +31,7 @@
                     <option value="">---Select---</option>
                     <option id="BTC" value="BTC">Bitcoin</option>
                     <option id="ETH" value="ETH">Ethereum</option>
-                    <option id="DOGE" value="DOGE">Doge Coin</option>
+                    <option id="DOGE" value="DOGE">Dogecoin</option>
                     <option id="BCH" value="BCH">Bitcoin Cash</option>
                 </select>
                 <br><br>
@@ -39,7 +39,7 @@
             </div>
         </div>
         <div class="exhButton">
-            <button id="calcButton">Convert</button>
+            <button id="calcButton" onclick="fetchData()">Convert</button>
         </div>
         <div class="usdInr">
             <table>
