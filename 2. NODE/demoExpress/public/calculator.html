@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculaor</title>
+    <link rel="stylesheet" href="./calculatorStyle.css">
+    <script src="./calculatorScript.js" defer></script>
+</head>
+
+<body>
+    <div class="calculator">
+        <input type="text" class="output" id="output" disabled>
+            <table class="inputArea">
+                <tr>
+                    <td><button onclick="clearDisplay()" id="allClear">AC</button></td>
+                    <td><button onclick="square()" id="numberSquare">x<sup>2</sup></button></td>
+                    <td><button onclick="sqRoot()" id="numberSquareRoot">&Sqrt;x</button></td>
+                    <td><button onclick="displayAnswer()" id="buttonEnter">=</button></td>
+                </tr>
+                <tr>
+                    <td><button onclick="display(1)" id="button1">1</button></td>
+                    <td><button onclick="display(2)" id="button2">2</button></td>
+                    <td><button onclick="display(3)" id="button3">3</button></td>
+                    <td><button onclick="display('+')" id="button+">+</button></td>
+                </tr>
+                <tr>
+                    <td><button onclick="display(4)" id="button4">4</button></td>
+                    <td><button onclick="display(5)" id="button5">5</button></td>
+                    <td><button onclick="display(6)" id="button6">6</button></td>
+                    <td><button onclick="display('-')" id="button-">-</button></td>
+                </tr>
+                <tr>
+                    <td><button onclick="display(7)" id="button7">7</button></td>
+                    <td><button onclick="display(8)" id="button8">8</button></td>
+                    <td><button onclick="display(9)" id="button9">9</button></td>
+                    <td><button onclick="display('*')" id="button*">*</button></td>
+                </tr>
+                <tr>
+                    <td><button onclick="display('.')" id="button.">.</button></td>
+                    <td><button onclick="display(0)" id="button0">0</button></td>
+                    <td><button onclick="backspace()" id="buttonBackspace">C</button></td>
+                    <td><button onclick="display('/')" id="button/">/</button></td>
+                </tr>
+            </table>
+    </div>
+</body>
+
+</html>
