@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <script src="login.js" defer></script>
+    <link rel="stylesheet" href="authStyle.css">
+</head>
+
+<body>
+
+    <%- include('./partials/header') %>
+
+        <div class="form">
+            <form id="loginForm">
+                <h1>Login</h1>
+                <hr>
+                <div class="radio">
+                    <div>
+                        <input type="radio" name="type" value="1" checked>
+                        <label for="customer">Buyer</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="type" value="2">
+                        <label for="seller">Seller</label>
+                    </div>
+                </div>
+
+                <label for="email">E-mail</label>
+                <input type="email" name="email" autocomplete="off" placeholder="johndoe@gmail.com" required>
+                <p class="email error"></p>
+
+                <label for="password">Password</label>
+                <input type="password" name="password" required>
+                <p class="password error"></p>
+
+                <div class="subBtn">
+                    <input type="submit" value="Login">
+                </div>
+            </form>
+        </div>
+
+        <%- include('./partials/footer') %>
+
+</body>
+
+</html>

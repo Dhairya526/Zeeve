@@ -1,0 +1,11 @@
+<nav>
+    <ul>
+        <% if (user) { %>
+            <li>Welcome,
+                <%= user.fName %>
+                    <%= user.lName %>
+            </li>
+            <li><a href="/logout">Log out</a></li>
+            <% } %>
+    </ul>
+</nav>
