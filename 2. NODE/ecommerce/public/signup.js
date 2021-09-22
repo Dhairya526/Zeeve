@@ -32,8 +32,11 @@ form.addEventListener('submit', async(e) => {
             lNameError.textContent = data.errors.lname;
             emailError.textContent = data.errors.email;
             passwordError.textContent = data.errors.password;
-        } else if (data.user) {
-            location.assign(`/dashboard/${userType}`);
+        } else if (data.user.userType) {
+            if (data.user.userType == '1')
+                location.assign('/buyerDash');
+            else if (data.user.userType == '2')
+                location.assign('/sellerDash');
         }
     } catch (err) {
         alert(err);

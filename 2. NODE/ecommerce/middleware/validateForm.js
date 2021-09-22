@@ -1,11 +1,12 @@
-module.exports.validateForm = (req, res, next) => {
-    const { userType, fName, lName, email, password } = req.body;
-    console.log('In validate function', userType, fName, lName, email, password);
-    let errors = {};
+const validateForm = (req, res, next) => {
     if (req.url === '/signup') {
 
         console.log(req.url, 'signup');
         const nameRegex = /^[a-zA-Z]{1,15}$/;
+
+        const { userType, fName, lName, email, password } = req.body;
+        console.log('In validate function', userType, fName, lName, email, password);
+        let errors = {};
 
         if (fName == '')
             errors.fname = 'First name cannot be empty';
@@ -45,6 +46,10 @@ module.exports.validateForm = (req, res, next) => {
 
         console.log(req.url, 'login');
 
+        const { userType, fName, lName, email, password } = req.body;
+        console.log('In validate function', userType, fName, lName, email, password);
+        let errors = {};
+
         if (email == '')
             errors.email = 'Email cannot be empty';
         else {
@@ -64,5 +69,10 @@ module.exports.validateForm = (req, res, next) => {
             res.json({ errors });
         else
             next();
+    } else if (req.url === '/sellerDash/addProduct') {
+        console.log(req.url, 'addProduct');
+        next();
     }
 }
+
+module.exports = { validateForm };

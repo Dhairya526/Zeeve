@@ -11,16 +11,22 @@ const generateJWTToken = (userType, email) => {
 
 const validateUser = (req, res, next) => {
     const token = req.cookies.jwt;
-
+    console.log('req', req.url);
     if (token) {
-        jwt.verify(token, _key, (err, decodedToken) => {
+        jwt.verify(token, _key, async (err, decodedToken) => {
             if (err) {
                 res.redirect('/login');
                 console.log('jwt error', err);
-            } else if (req.params.userType == decodedToken.userType)
-                next();
-            else
-                res.redirect('/login');
+            } else {
+                // const user = await findUser(decodedToken.userType, decodedToken.email);
+
+                if (req.url.startsWith('/buyerDash') && decodedToken.userType == '1')
+                    next();
+                else if (req.url.startsWith('/sellerDash') && decodedToken.userType == '2')
+                    next();
+                else
+                    res.redirect('/login');
+            }
         });
     } else
         res.redirect('/login');
@@ -30,13 +36,15 @@ const checkUser = (req, res, next) => {
     const token = req.cookies.jwt;
 
     if (token) {
-        jwt.verify(token, _key, async(err, decodedToken) => {
+        jwt.verify(token, _key, async (err, decodedToken) => {
             if (err) {
                 console.log(err);
                 res.locals.user = "";
                 next();
             } else {
-                const user = await findUser(decodedToken.userType, decodedToken.email)
+                const user = await findUser(decodedToken.userType, decodedToken.email);
+                console.log('user',user);
+                req.user = user;
                 res.locals.user = user;
                 next();
             }

@@ -20,6 +20,7 @@ app.set('view engine', 'ejs');
 
 //routes
 app.get('*', checkUser);
+app.post('*', checkUser);
 app.get('/', (req, res) => {
     res.render('index');
 });

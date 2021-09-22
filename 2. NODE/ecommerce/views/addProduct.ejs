@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Product</title>
+    <link rel="stylesheet" href="/dashStyle.css">
+    <script src="/addProduct.js" defer></script>
+</head>
+
+<body>
+    <%- include('partials/dashHeader') %>
+
+        <div class="form">
+            <form id="addProduct">
+
+                <label for="category">Category</label>
+                <select name="category" id="category">
+                    <option value="">--- Select Category ---</option>
+                    <option value="1">Clothing and Footware</option>
+                    <option value="2">Electricals</option>
+                    <option value="3">Electronics</option>
+                    <option value="4">Food and Beverages</option>
+                    <option value="5">Furnitute</option>
+                    <option value="6">Home Decor</option>
+                    <option value="7">Kitchenware</option>
+                </select>
+                <p class="select error"></p>
+
+                <label for="name">Name</label>
+                <input type="text" name="name" required>
+                <p class="name error"></p>
+
+                <label for="price">Price</label>
+                <input type="text" name="price" required>
+                <p class="price error"></p>
+
+                <label for="quantity">Quantity</label>
+                <input type="number" name="quantity" required />
+                <p class="quantity error"></p>
+
+                <label for="description">Description</label>
+                <textarea name="description" cols="30" rows="5" maxlength="500"></textarea>
+                <p class="description error"></p>
+
+                <div class="subBtn">
+                    <input type="submit" value="Add Item">
+                </div>
+            </form>
+        </div>
+</body>
+
+</html>

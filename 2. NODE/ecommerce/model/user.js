@@ -49,11 +49,10 @@ const checkUserExists = async(userType, email) => {
 
 const findUser = async(userType, email) => {
     try {
-        const query = `Select first_name, last_name from tbl_user where type_id = '${userType}' and email = '${email}';`;
+        const query = `Select uid, first_name, last_name from tbl_user where type_id = '${userType}' and email = '${email}';`;
         const result = await runQuery(query);
         if (result.length > 0) {
-            // console.log(result);
-            return { userType: userType, fName: result[0].first_name, lName: result[0].last_name, email: email };
+            return { userId: result[0].uid, userType: userType, fName: result[0].first_name, lName: result[0].last_name, email: email };
         }
 
     } catch (err) {

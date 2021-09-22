@@ -1,0 +1,14 @@
+<nav>
+  <ul>
+    <% if (user) { %> 
+      <% if(user.userType == 1) {%>
+        <li><a href="/buyerDash">HOME</a></li>
+      <% } %> 
+      <% if(user.userType == 2) {%>
+        <li><a href="/sellerDash">HOME</a></li>
+      <% } %>
+      <li><a href="">Welcome,<%= user.fName %> <%= user.lName %></a></li>
+      <li><a href="/logout">Log out</a></li>
+    <% } %>
+  </ul>
+</nav>

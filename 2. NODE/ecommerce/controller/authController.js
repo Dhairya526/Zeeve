@@ -29,7 +29,7 @@ const login_post = async(req, res) => {
                     httpOnly: true,
                     maxAge: 1000 * 60 * 60 * 24
                 });
-                res.status(200).json({ user: email });
+                res.status(200).json({ user: {email, userType} });
             } else
                 throw Error('Invalid password');
         } else {
@@ -59,7 +59,7 @@ const signup_post = async(req, res) => {
                 httpOnly: true,
                 maxAge: 1000 * 60 * 60 * 24
             });
-            res.status(201).json({ user: email });
+            res.status(201).json({ user: {email, userType} });
         } else
             throw Error('Email already in use');
     } catch (err) {
