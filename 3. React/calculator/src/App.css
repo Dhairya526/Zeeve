@@ -1,0 +1,54 @@
+.container {
+  margin: 20vh 25vw;
+}
+
+.calculator {
+  text-align: center;
+  width: 40vw;
+  margin: 0 auto;
+  /* border: 1px solid black; */
+  padding: 0;
+}
+
+#displayArea {
+  height: 10vh;
+  width: 100%;
+  padding: 0;
+  font-size: 3vh;
+  text-align: right;
+  background-color: rgb(51, 51, 51);
+  border: none;
+  color: white;
+  word-wrap: break-word;
+}
+
+.inputArea table {
+  margin: auto;
+  border-collapse: collapse;
+}
+
+.inputArea td {
+  padding: 0;
+}
+
+.inputArea button {
+  height: 10vh;
+  width: 10vw;
+  border: none;
+  font-size: 3.5vh;
+  background-color: black;
+  color: white;
+}
+
+.inputArea button:hover {
+  background-color: rgb(49, 49, 49);
+}
+
+.inputArea button:active {
+  background-color: rgb(151, 151, 151);
+  color: black;
+}
+
+.inputArea button:focus-visible {
+  outline: none;
+}
