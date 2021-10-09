@@ -15,7 +15,7 @@ const loginPost = async (req, res) => {
         if (userExists) {
             const isValidPassword = await checkPassword(constant.USER[userType], email, password);
             if (isValidPassword)
-                res.json({ userType, email, password });
+                res.json({ user: { userType, email, password } });
             else
                 throw Error('!password');
         } else {
@@ -41,7 +41,7 @@ const signupPost = async (req, res) => {
             const userId = await registerUser(constant.USER[userType], fName, lName, email, password);
             const token = generateJwtToken({ userType, userId });
             res.cookie('jwt', token, { maxAge: 1000 * 60 * 60 * 24, httpOnly: true });
-            res.json({ userType, fName, lName, email, password });
+            res.json({ user: { userType, fName, lName, email, password } });
         } else {
             throw Error('!!email');
         }

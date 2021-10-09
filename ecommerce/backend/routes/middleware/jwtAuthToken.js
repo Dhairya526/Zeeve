@@ -11,4 +11,35 @@ const generateJwtToken = (data) => {
     return token;
 }
 
+const validateBuyer = (req, res, next) => {
+    const token = req.cookies.jwt;
+    if (token) {
+        try {
+            const decodedToken = jwt.verify(token, config.jwtKey);
+            if (decodedToken.userType === 'BUYER')
+                next();
+            else throw Error('invalid user');
+        } catch (err) {
+            console.log('jwt error');
+        }
+    } else {
+        console.log('jwt error');
+    }
+}
+
+const validateSeller = (req, res, next) => {
+    const token = req.cookies.jwt;
+    if (token) {
+        try {
+            const decodedToken = jwt.verify(token, config.jwtKey);
+            if (decodedToken.userType === 'SELLER')
+                next();
+            else throw Error('invalid user');
+        } catch (err) {
+            console.log('jwt error');
+        }
+    } else {
+        console.log('jwt error');
+    }
+}
 module.exports = { generateJwtToken };

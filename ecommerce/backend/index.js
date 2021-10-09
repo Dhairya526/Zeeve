@@ -1,12 +1,13 @@
 const express = require('express');
+const cors = require('cors');
 
-// const { db } = require('./model/mysql.client');
 const authRoutes = require('./routes/auth.route')
 const sellerRoutes = require('./routes/seller.route');
 const buyerRoutes = require('./routes/buyer.route');
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 
 app.get('/', (req, res) => {

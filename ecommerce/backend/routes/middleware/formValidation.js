@@ -19,20 +19,20 @@ const userRegisterValidation = (req, res, next) => {
      * Checking errors in first name
      */
     if (fName === '')
-        errors.fname = 'First name cannot be empty';
+        errors.fName = 'First name cannot be empty';
     else if (!userNameRegex.test(fName))
-        errors.fname = 'Enter valid name';
+        errors.fName = 'Enter valid name';
     else if (fName.length > 15)
-        errors.fname = 'First name can have maximum of 15 characters';
+        errors.fName = 'First name can have maximum of 15 characters';
     /**
      * Checking errors in last name
      */
     if (lName === '')
-        errors.lname = 'Last name cannot be empty';
+        errors.lName = 'Last name cannot be empty';
     else if (!userNameRegex.test(lName))
-        errors.lname = 'Enter valid name';
+        errors.lName = 'Enter valid name';
     else if (lName.length > 15)
-        errors.lname = 'Last name can have maximum of 15 characters';
+        errors.lName = 'Last name can have maximum of 15 characters';
     /**
      * Checking errors in email
      */
