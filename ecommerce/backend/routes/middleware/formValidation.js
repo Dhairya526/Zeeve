@@ -101,17 +101,17 @@ const userLoginValidation = (req, res, next) => {
  * @param {Response} res 
  * @param {Function} next 
  */
-const productRegisterValidation = (req, res, next) => {
+const productDetailsValidation = (req, res, next) => {
     const errors = {};
+    const { category, name, price, quantity, description } = req.body;
+
     /**
      * Validate product category
      */
-    const { category, name, price, quantity, description } = req.body;
     if (category === undefined || category === null || category === '')
         errors.category = 'Please select a category'
     else if (!Object.keys(constant.PRODUCT_CATEGORY).includes(category))
         errors.category = 'Invalid category'
-
     /**
      * Validate product name
      */
@@ -127,7 +127,7 @@ const productRegisterValidation = (req, res, next) => {
     if (price === undefined || price === null || price === '')
         errors.price = 'Price cannot be empty';
     else if (isNaN(price))
-        errors.price = 'Enter valid priceee';
+        errors.price = 'Enter valid price';
     else if (!productPriceRegex.test(price))
         errors.price = 'Enter valid price';
     /**
@@ -159,17 +159,9 @@ const productRegisterValidation = (req, res, next) => {
         next();
 }
 
-/**
- * Validate product updataion details
- * @param {Request} req 
- * @param {Response} res 
- * @param {Function} next 
- */
-const productUpdateValidation = (req, res, next) => { }
 
 module.exports = {
     userLoginValidation,
     userRegisterValidation,
-    productRegisterValidation,
-    productUpdateValidation
+    productDetailsValidation,
 };

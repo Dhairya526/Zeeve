@@ -33,7 +33,6 @@ const hashPassword = (password, salt) => {
 const verifyPassword = (passHash, password, salt) => {
     const pass = password + salt;
     const isValid = bcrypt.compareSync(pass, passHash);
-    console.log('isValsid', isValid);
     return isValid;
 }
 

@@ -1,7 +1,7 @@
-const constant = {
+export const constant = {
     userType: {
-        ADMIN: 0,
-        BUYER: 1,
-        SELLER: 2
+        ADMIN: 'ADMIN',
+        BUYER: 'BUYER',
+        SELLER: 'SELLER'
     },
-}
+};

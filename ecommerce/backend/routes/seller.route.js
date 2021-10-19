@@ -3,20 +3,23 @@ const {
     modifyProductPut,
     removeProductDelete,
     getCategoriesGet,
-    getProfileGet
+    getProfileGet,
+    getProductsGet
 } = require('../controller/seller.controller');
-const { productRegisterValidation } = require('./middleware/formValidation');
+const { productDetailsValidation } = require('./middleware/formValidation');
 
 const router = require('express').Router();
 
-router.post('/addProduct', productRegisterValidation, addProductPost);
+router.post('/addProduct', productDetailsValidation, addProductPost);
 
-router.put('/modifyProduct/:id', modifyProductPut);
+router.put('/modifyProduct/:pid', productDetailsValidation, modifyProductPut);
 
-router.delete('/removeProduct/:id', removeProductDelete);
+router.delete('/removeProduct/:pid', removeProductDelete);
 
 router.get('/getCategories', getCategoriesGet);
 
 router.get('/profile', getProfileGet);
+
+router.get('/getProducts/:uid', getProductsGet);
 
 module.exports = router;

@@ -1,11 +1,13 @@
 import React, { useState, useContext } from 'react';
-import { Link, Redirect } from 'react-router-dom';
-import config from '../../config/config';
-import { fetchApi } from '../../core/services/api';
-import { userContext } from '../../provider/userContext';
+import { Link, useHistory } from 'react-router-dom';
+import { loginApi } from '../../core/services/api';
+import { setAccessToken } from '../../core/utils/tokenHandler';
+import { userLoginValidation } from '../../core/validations/authValidation';
+import { Store } from '../../provider/Store';
 
 function Login() {
-    const contextUser = useContext(userContext);
+    const history = useHistory();
+    const { setUserData } = useContext(Store);
     const initialErrors = {
         login: "",
         email: "",
@@ -19,21 +21,28 @@ function Login() {
         try {
             e.preventDefault();
             setErrors(initialErrors);
-            const body = JSON.stringify({ userType, email, password });
-            const data = await fetchApi(config.authApi + '/login', "POST", body);
-            if (data.errors) {
-                console.log(data.errors);
+            const errors = userLoginValidation(email, password);
+            if (Object.keys(errors).length !== 0) {
                 setErrors({
-                    login: data.errors.login,
-                    email: data.errors.email,
-                    password: data.errors.password,
+                    email: errors.email,
+                    password: errors.password,
                 });
-            }
-            else if (data.user.userType) {
-                contextUser.setUser(data.user.userType);
-                console.log(contextUser.userType);
-                console.log('loggedin');
-                <Redirect to="/dashboard" />
+            } else {
+                const body = JSON.stringify({ userType, email, password });
+                const data = await loginApi(body);
+                if (data.errors) {
+                    console.log(data.errors);
+                    setErrors({
+                        login: data.errors.login,
+                        email: data.errors.email,
+                        password: data.errors.password,
+                    });
+                }
+                else if (data.token) {
+                    setAccessToken(data.token);
+                    setUserData(data.user);
+                    history.push('/dashboard');
+                }
             }
         } catch (err) {
             console.log(err);
@@ -41,7 +50,7 @@ function Login() {
     }
     return (
         <div className="container w-50 border my-auto py-2">
-            <div className="my-3 fs-5 alert-danger">
+            <div className="my-3 fs-5 alert-danger text-center">
                 {errors.login}
             </div>
             <form>

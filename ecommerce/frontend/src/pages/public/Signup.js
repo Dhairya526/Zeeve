@@ -1,9 +1,13 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import config from '../../config/config';
-import { fetchApi } from '../../core/services/api';
+import React, { useContext, useState } from 'react';
+import { Link, useHistory } from 'react-router-dom';
+import { signupApi } from '../../core/services/api';
+import { setAccessToken } from '../../core/utils/tokenHandler';
+import { userRegisterValidation } from '../../core/validations/authValidation';
+import { Store } from '../../provider/Store';
 
 function Signup() {
+    const { setUserData } = useContext(Store);
+    const history = useHistory();
     const initialErrors = {
         fName: "",
         lName: "",
@@ -20,25 +24,33 @@ function Signup() {
         try {
             e.preventDefault();
             setErrors(initialErrors);
-            const body = JSON.stringify({ userType, fName, lName, email, password });
-            const response = await fetchApi(config.authApi + '/signup', "POST", body);
-            const data = await response.json();
-            if (data.errors) {
-                console.log(data.errors);
+            const errors = userRegisterValidation(fName, lName, email, password);
+            if (Object.keys(errors).length !== 0) {
                 setErrors({
-                    fName: data.errors.fName,
-                    lName: data.errors.lName,
-                    email: data.errors.email,
-                    password: data.errors.password,
+                    fName: errors.fName,
+                    lName: errors.lName,
+                    email: errors.email,
+                    password: errors.password,
                 });
+            } else {
+                const body = JSON.stringify({ userType, fName, lName, email, password });
+                const data = await signupApi(body);
+                if (data.errors) {
+                    console.log(data.errors);
+                    setErrors({
+                        fName: data.errors.fName,
+                        lName: data.errors.lName,
+                        email: data.errors.email,
+                        password: data.errors.password,
+                    });
+                }
+                else if (data.token) {
+                    setAccessToken(data.token);
+                    setUserData(data.user);
+                    history.push('/dashboard');
+                }
             }
-            else if (data.user.userType) {
-                // if (data.user.userType == 'BUYER')
-                //     location.assign('/buyerDash');
-                // else if (data.user.userType == 'SELLER')
-                //     location.assign('/sellerDash');
-                console.log('registered');
-            }
+
         } catch (err) {
             console.log(err);
         }

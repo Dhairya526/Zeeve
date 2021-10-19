@@ -1,5 +1,8 @@
 const jwt = require('jsonwebtoken');
 const { config } = require('../../config');
+const { findUser } = require('../../services/user');
+const { constant } = require('../../utils/constants');
+const { handleErrors } = require('../../utils/errorHandler');
 
 /**
  * Generates and returns a JWT token
@@ -11,35 +14,29 @@ const generateJwtToken = (data) => {
     return token;
 }
 
-const validateBuyer = (req, res, next) => {
-    const token = req.cookies.jwt;
-    if (token) {
-        try {
-            const decodedToken = jwt.verify(token, config.jwtKey);
-            if (decodedToken.userType === 'BUYER')
-                next();
-            else throw Error('invalid user');
-        } catch (err) {
-            console.log('jwt error');
-        }
-    } else {
-        console.log('jwt error');
+const validateUser = async (req, res, next) => {
+    try {
+        const token = req.header('jwt');
+        if (token) {
+            try {
+                const decodedToken = jwt.verify(token, config.jwtKey);
+                const user = await findUser(constant.USER[decodedToken.userType], decodedToken.userId);
+                if (user !== {}) {
+                    res.user = user;
+                    next();
+                }
+                else
+                    throw Error('!access');
+            } catch (err) {
+                throw Error('!access');
+            }
+        } else throw Error('!access')
+    } catch (error) {
+        console.log('jwt error---->', error);
+        const errors = handleErrors(error);
+        res.json({ errors });
     }
 }
 
-const validateSeller = (req, res, next) => {
-    const token = req.cookies.jwt;
-    if (token) {
-        try {
-            const decodedToken = jwt.verify(token, config.jwtKey);
-            if (decodedToken.userType === 'SELLER')
-                next();
-            else throw Error('invalid user');
-        } catch (err) {
-            console.log('jwt error');
-        }
-    } else {
-        console.log('jwt error');
-    }
-}
-module.exports = { generateJwtToken };
+
+module.exports = { generateJwtToken, validateUser };

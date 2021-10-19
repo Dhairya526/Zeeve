@@ -37,7 +37,7 @@ const checkExistance = async (userType, email) => {
     try {
         const query = 'SELECT uid FROM tbl_user WHERE type_id=? AND email=?;';
         const [result, rows] = await dbPool.query(query, [userType, email]);
-        console.log('ressssssssssssssult', result);
+        // console.log('ressssssssssssssult', result);
         return !!result.length;
     } catch (err) {
         console.log('err---------->', err);
@@ -71,15 +71,15 @@ const checkPassword = async (userType, email, password) => {
  * @param {string} email 
  * @returns {object}
  */
-const findUser = async (userType, email) => {
+const findUser = async (userType, userId) => {
     try {
         const user = {};
-        const query = 'SELECT uid, first_name, last_name FROM tbl_user WHERE email=? AND userType=?;';
-        const [result] = await dbPool.query(query, [email, userType]);
+        const query = 'SELECT uid, first_name, last_name FROM tbl_user WHERE uid=? AND type_id=?;';
+        const [result] = await dbPool.query(query, [userId, userType]);
         if (result.length > 0) {
-            user.userType = userType;
             user.userId = result[0].uid;
-            user.email = email;
+            user.userType = Object.keys(constant.USER).find(key => constant.USER[key] === result[0].type_id);
+            user.email = result[0].email;
             user.fName = result[0].first_name;
             user.lName = result[0].last_name;
         }
@@ -95,21 +95,37 @@ const findUser = async (userType, email) => {
  * @param {number} userId 
  * @returns {object} user details
  */
-const userProfile = async (userId) => {
+const userDetails = async (userId) => {
     try {
         const userData = {};
-        const query = 'SELECT type_id, first_name, last_name, email FROM tbl_user WHERE uid=?;';
+        const query = 'SELECT  type_id, first_name, last_name, email FROM tbl_user WHERE uid=?;';
         const [result] = await dbPool.query(query, [userId]);
         // console.log(result);
         if (result.length > 0) {
-            // userData.userType =constant.USER result[0].type_id;
             userData.userType = Object.keys(constant.USER).find(key => constant.USER[key] === result[0].type_id);
-            userData.email = result[0].email;
             userData.fName = result[0].first_name;
             userData.lName = result[0].last_name;
+            userData.email = result[0].email;
         }
         // console.log(userData);
         return userData;
+    } catch (err) {
+        console.log('error--------->', err);
+        throw err;
+    }
+}
+
+/**
+ * Returns the user id associated with the giver userType and email
+ * @param {*} userType 
+ * @param {*} email 
+ * @returns {number} user id
+ */
+const getUserId = async (userType, email) => {
+    try {
+        const query = 'SELECT uid FROM tbl_user WHERE type_id=? AND email=?;';
+        const [result] = await dbPool.query(query, [userType, email]);
+        return result[0].uid;
     } catch (err) {
         console.log('error--------->', err);
         throw err;
@@ -131,5 +147,6 @@ module.exports = {
     checkExistance,
     checkPassword,
     findUser,
-    userProfile
+    userDetails,
+    getUserId,
 };

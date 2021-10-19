@@ -12,10 +12,10 @@ const { constant } = require("../utils/constants");
  */
 const addProduct = async (category, name, price, quantity, description, userId) => {
     try {
-        // userId = 121;
         const sqlDateTimeNow = new Date().toISOString().slice(0, 19).replace('T', ' ');
         const query = 'INSERT INTO tbl_product (category, name, price, quantity, description, created_by, created_at, modified_by, modified_at) VALUES (?,?,?,?,?,?,?,?,?);';
-        const [result] = await dbPool.query(query, [constant.PRODUCT_CATEGORY[category], name, price, quantity, description, userId, sqlDateTimeNow, userId, sqlDateTimeNow]);
+        const [result] = await dbPool.query(query, [category, name, price, quantity, description, userId, sqlDateTimeNow, userId, sqlDateTimeNow]);
+        return result.insertId;
     } catch (err) {
         console.log('err-------====>', err);
         throw err;
@@ -37,6 +37,8 @@ const modifyProduct = async (productId, category, name, price, quantity, descrip
         const sqlDateTimeNow = new Date().toISOString().slice(0, 19).replace('T', ' ');
         const query = 'UPDATE tbl_product SET category=?, name=?, price=?, quantity=?, description=?, modified_by=?, modified_at=? WHERE pid=? AND created_by=?;';
         const [result, rows] = await dbPool.query(query, [category, name, price, quantity, description, userId, sqlDateTimeNow, productId, userId]);
+        // console.log('Updated', result);
+        return result.changedRows > 0;
     } catch (err) {
         console.log('err-------====>', err);
         throw err;
@@ -50,9 +52,10 @@ const modifyProduct = async (productId, category, name, price, quantity, descrip
  */
 const removeProduct = async (productId, userId) => {
     try {
-        const sqlDateTimeNow = new Date().toISOString().slice(0, 19).replace('T', ' ');
+        // const sqlDateTimeNow = new Date().toISOString().slice(0, 19).replace('T', ' ');
         const query = 'DELETE FROM tbl_product WHERE pid=? AND created_by=?;';
         const [result, rows] = await dbPool.query(query, [productId, userId]);
+        return result.affectedRows > 0;
     } catch (err) {
         console.log('err-------====>', err);
         throw err;
@@ -65,12 +68,14 @@ const removeProduct = async (productId, userId) => {
  */
 const getProductCategories = async () => {
     try {
-        const categories = {};
+        const categories = [];
         const query = 'SELECT name, code FROM mst_product_type;';
         const [result] = await dbPool.query(query);
         // console.log(result);
         result.forEach((textrow) => {
-            categories[textrow.name] = textrow.code;
+            const name = textrow.name;
+            const code = textrow.code;
+            categories.push({ code, name });
         });
         return categories;
     } catch (err) {
@@ -85,10 +90,35 @@ const getProductCategories = async () => {
  */
 const getAllProducts = async () => {
     try {
-        const query = 'SELECT category, name, price, quantity, description FROM tbl_product;';
+        const query = 'SELECT p.pid, m.code AS category, p.name, p.price, p.quantity, p.description FROM tbl_product AS p INNER JOIN mst_product_type AS m WHERE p.category = m.type_id;';
         const [result] = await dbPool.query(query);
         // console.log(result);
         return result;
+    } catch (err) {
+        console.log('err-------====>', err);
+        throw err;
+    }
+}
+
+const getProducts = async (userId) => {
+    try {
+        const query = 'SELECT p.pid, m.code AS category, p.name, p.price, p.quantity, p.description FROM tbl_product AS p INNER JOIN mst_product_type AS m WHERE p.category = m.type_id AND p.created_by=?;';
+        const [result] = await dbPool.query(query, [userId]);
+        return result;
+    } catch (err) {
+        console.log('err-------====>', err);
+        throw err;
+    }
+}
+
+const checkUserAndProduct = async (productId, userId) => {
+    try {
+        const query = 'SELECT * FROM tbl_product WHERE pid=? AND created_by=?';
+        const [result] = await dbPool.query(query, [productId, userId]);
+        if (result.length > 0)
+            return true;
+        else
+            return false;
     } catch (err) {
         console.log('err-------====>', err);
         throw err;
@@ -112,4 +142,6 @@ module.exports = {
     removeProduct,
     getProductCategories,
     getAllProducts,
+    getProducts,
+    checkUserAndProduct
 };
