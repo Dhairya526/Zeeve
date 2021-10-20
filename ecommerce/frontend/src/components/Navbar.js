@@ -7,7 +7,7 @@ function Navbar() {
         <header>
             <nav className="navbar navbar-expand-sm navbar-dark bg-dark">
                 <div className="container-fluid">
-                    <Link className="navbar-brand" to='/dashboard'>Navbar</Link>
+                    <Link className="navbar-brand" to='/dashboard'>My Ecommerce</Link>
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggler"
                         aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
                         <span className="navbar-toggler-icon"></span>

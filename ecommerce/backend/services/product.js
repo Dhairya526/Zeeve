@@ -10,15 +10,15 @@ const { constant } = require("../utils/constants");
  * @param {string} description 
  * @param {number} userId 
  */
-const addProduct = async (category, name, price, quantity, description, userId) => {
+const addProduct = async (category, name, imageBase64, price, quantity, description, userId) => {
     try {
         const sqlDateTimeNow = new Date().toISOString().slice(0, 19).replace('T', ' ');
-        const query = 'INSERT INTO tbl_product (category, name, price, quantity, description, created_by, created_at, modified_by, modified_at) VALUES (?,?,?,?,?,?,?,?,?);';
-        const [result] = await dbPool.query(query, [category, name, price, quantity, description, userId, sqlDateTimeNow, userId, sqlDateTimeNow]);
+        const query = 'INSERT INTO tbl_product (category, name, image, price, quantity, description, created_by, created_at, modified_by, modified_at) VALUES (?,?,?,?,?,?,?,?,?,?);';
+        const [result] = await dbPool.query(query, [category, name, imageBase64, price, quantity, description, userId, sqlDateTimeNow, userId, sqlDateTimeNow]);
         return result.insertId;
     } catch (err) {
         console.log('err-------====>', err);
-        throw err;
+        throw Error('!addProduct');
     }
 }
 
@@ -32,11 +32,11 @@ const addProduct = async (category, name, price, quantity, description, userId) 
  * @param {string} description 
  * @param {number} userId 
  */
-const modifyProduct = async (productId, category, name, price, quantity, description, userId) => {
+const modifyProduct = async (productId, category, name, imageBase64, price, quantity, description, userId) => {
     try {
         const sqlDateTimeNow = new Date().toISOString().slice(0, 19).replace('T', ' ');
-        const query = 'UPDATE tbl_product SET category=?, name=?, price=?, quantity=?, description=?, modified_by=?, modified_at=? WHERE pid=? AND created_by=?;';
-        const [result, rows] = await dbPool.query(query, [category, name, price, quantity, description, userId, sqlDateTimeNow, productId, userId]);
+        const query = 'UPDATE tbl_product SET category=?, name=?, image=?, price=?, quantity=?, description=?, modified_by=?, modified_at=? WHERE pid=? AND created_by=?;';
+        const [result, rows] = await dbPool.query(query, [category, name, imageBase64, price, quantity, description, userId, sqlDateTimeNow, productId, userId]);
         // console.log('Updated', result);
         return result.changedRows > 0;
     } catch (err) {
@@ -86,11 +86,11 @@ const getProductCategories = async () => {
 
 /**
  * Returns all the products available
- * @returns {array} Array of product object
+ * @returns {array} Array of product objects
  */
 const getAllProducts = async () => {
     try {
-        const query = 'SELECT p.pid, m.code AS category, p.name, p.price, p.quantity, p.description FROM tbl_product AS p INNER JOIN mst_product_type AS m WHERE p.category = m.type_id;';
+        const query = 'SELECT p.pid, m.code AS category, p.name, p.image, p.price, p.quantity, p.description FROM tbl_product AS p INNER JOIN mst_product_type AS m WHERE p.category = m.type_id;';
         const [result] = await dbPool.query(query);
         // console.log(result);
         return result;
@@ -100,10 +100,16 @@ const getAllProducts = async () => {
     }
 }
 
+/**
+ * Returns products based on the userId passed
+ * @param {number} userId 
+ * @returns {array} Array of product objects
+ */
 const getProducts = async (userId) => {
     try {
-        const query = 'SELECT p.pid, m.code AS category, p.name, p.price, p.quantity, p.description FROM tbl_product AS p INNER JOIN mst_product_type AS m WHERE p.category = m.type_id AND p.created_by=?;';
+        const query = 'SELECT p.pid, m.code AS category, p.name, p.image, p.price, p.quantity, p.description FROM tbl_product AS p INNER JOIN mst_product_type AS m WHERE p.category = m.type_id AND p.created_by=?;';
         const [result] = await dbPool.query(query, [userId]);
+        console.log('%%%%%%%%%%%%%', result);
         return result;
     } catch (err) {
         console.log('err-------====>', err);
@@ -111,6 +117,12 @@ const getProducts = async (userId) => {
     }
 }
 
+/**
+ * Checks whether the productId is associated with the userId or not
+ * @param {number} productId 
+ * @param {number} userId 
+ * @returns {boolean}
+ */
 const checkUserAndProduct = async (productId, userId) => {
     try {
         const query = 'SELECT * FROM tbl_product WHERE pid=? AND created_by=?';

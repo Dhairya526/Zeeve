@@ -1,16 +1,21 @@
+import { constant } from "../utils/constants";
+
 const productNameRegex = /^[a-zA-Z0-9 ]{1,50}$/;
 const productPriceRegex = /(^0\.\d{1,2}$)|(^[1-9]\d{0,8}(\.\d{1,2})?$)/;
 const productQuantityRegex = /^[0-9]+$/;
 
-export const productDetailsValidation = (categories, category, name, price, quantity, description) => {
+export const productDetailsValidation = (categories, category, name, image, price, quantity, description) => {
     const errors = {};
+    const categoryCodes = [];
+    categories.forEach(cat => { categoryCodes.push(cat.code) });
     /**
      * Validate product category
      */
     if (category === undefined || category === null || category === '')
         errors.category = 'Please select a category'
-    // else if (!Object.keys(constant.PRODUCT_CATEGORY).includes(category))
-    //     errors.category = 'Invalid category'
+    else if (!categoryCodes.includes(category)) {
+        errors.category = 'Invalid category'
+    }
     /**
      * Validate product name
      */
@@ -20,6 +25,14 @@ export const productDetailsValidation = (categories, category, name, price, quan
         errors.name = 'Name should have a maximum of 50 characters'
     else if (!productNameRegex.test(name))
         errors.name = 'Enter valid name'
+    /**
+     * Validate image extension
+     */
+    if (image !== null) {
+        const imgExt = image.type.split('/')[1];
+        if (!constant.imageExtensions.includes(imgExt))
+            errors.image = 'Invalid Image';
+    }
     /**
      * Validate product price
      */

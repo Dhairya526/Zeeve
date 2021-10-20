@@ -8,10 +8,10 @@ const { handleErrors } = require("../utils/errorHandler");
  * @param {Request} req 
  * @param {Response} res 
  */
-const addProductPost = (req, res) => {
+const addProductPost = async (req, res) => {
     try {
-        const { category, name, price, quantity, description, userId } = req.body;
-        const inserted = addProduct(constant.PRODUCT_CATEGORY[category], name, price, quantity, description, userId);
+        const { category, name, imageBase64, price, quantity, description, userId } = req.body;
+        const inserted = await addProduct(constant.PRODUCT_CATEGORY[category], name, imageBase64, price, quantity, description, userId);
         if (inserted)
             res.json({ success: true });
         else
@@ -32,14 +32,14 @@ const modifyProductPut = async (req, res) => {
     try {
         const productId = req.params.pid;
         const uId = res.user.userId;
-        const { category, name, price, quantity, description, userId } = req.body;
+        const { category, name, imageBase64, price, quantity, description, userId } = req.body;
         if (uId != userId) {
             console.log(uId, userId);
             throw Error('!access');
         }
         const isIntendedUser = checkUserAndProduct(productId, userId);
         if (isIntendedUser) {
-            const updated = await modifyProduct(productId, constant.PRODUCT_CATEGORY[category], name, price, quantity, description, userId);
+            const updated = await modifyProduct(productId, constant.PRODUCT_CATEGORY[category], imageBase64, name, price, quantity, description, userId);
             if (updated) {
                 console.log('updated product');
                 res.json({ success: true });

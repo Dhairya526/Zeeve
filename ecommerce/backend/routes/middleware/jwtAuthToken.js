@@ -28,6 +28,8 @@ const validateUser = async (req, res, next) => {
                 else
                     throw Error('!access');
             } catch (err) {
+                console.log('err++++++++++++--------->', err);
+                console.log('+++++++++++++++++++++++++++++++++++++++++++++++++', decodedToken);
                 throw Error('!access');
             }
         } else throw Error('!access')

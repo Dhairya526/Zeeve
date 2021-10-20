@@ -1,12 +1,13 @@
+import { Redirect } from "react-router-dom";
 import config from "../../config/config";
-import { getAccessToken } from "../utils/tokenHandler";
+import { getAccessToken, removeAccessToken } from "../utils/tokenHandler";
 
 const authToken = getAccessToken();
-// const logout = () => {
-//     alert('Unathorized Access!!!');
-//     removeAccessToken();
-//     return <Redirect to='/' />;
-// }
+const logout = () => {
+    alert('Unathorized Access!!!');
+    removeAccessToken();
+    return <Redirect to='/' />;
+}
 
 // **************************************************************************
 //                              Authentication APIs
@@ -93,10 +94,15 @@ export const productCategoriesApi = async () => {
         console.log('productCategoriesApi');
         const response = await fetch(config.sellerApi + '/getCategories', {
             method: "GET",
-            // headers: { "jwt": `${authToken}w` },
+            // headers: { "jwt": `${authToken}w` },s
             headers: { "jwt": authToken },
         });
         const data = await response.json();
+        if (data.errors)
+            if (data.errors.access) {
+                console.log(data.errors);
+                logout();
+            }
         return data;
     } catch (error) {
         console.log('errrrrrrrrr', error);

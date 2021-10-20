@@ -29,15 +29,12 @@ export default function SellerDash() {
     return (
         <div className="sdash">
             <Navbar />
-            Seller Dash
-
-            <div className="d-flex col-md-8 offset-md-2">
-                <div className="card justify-content-center text-center " style={{ width: '33%' }}>
-                    <button className="btn btn-light" onClick={() => { console.log('sell dash push'); history.push('/addProduct') }}>
-                        <i className="bi bi-plus-circle"></i></button>
-                </div>
+            <div className="justify-content-center text-center my-2 ">
+                <button className="btn btn-success" onClick={() => { console.log('sell dash push'); history.push('/addProduct') }}>
+                    <i className="bi bi-plus-circle"></i> Add New Product</button>
+            </div>
+            <div className="row row-cols-sm-3">
                 {sellerProducts.map((item) => {
-                    // return <ProductItem key={item.pid} seller={true} pid={item.pid} category={item.category} name={item.name} price={item.price} quantity={item.quantity} description={item.description} />
                     return <ProductItem key={item.pid} seller={true} item={item} updateProduct={updateCurrentProduct} />
                 })}
             </div>

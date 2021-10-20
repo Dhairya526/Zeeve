@@ -25,7 +25,8 @@ export default function EditProductModal(props) {
             setCategories(cats);
         }
         fetchCategories();
-        setProduct(props.product);
+        if (Object.keys(props.product).length > 0)
+            setProduct(props.product);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.product])
 
@@ -81,7 +82,6 @@ export default function EditProductModal(props) {
             console.log('err', err);
         }
     }
-
     return (
         <div>
 
