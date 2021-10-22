@@ -33,7 +33,7 @@ export default function SellerDash() {
                 <button className="btn btn-success" onClick={() => { console.log('sell dash push'); history.push('/addProduct') }}>
                     <i className="bi bi-plus-circle"></i> Add New Product</button>
             </div>
-            <div className="row row-cols-sm-3">
+            <div className="row w-100 gx-2 gy-4 ps-2">
                 {sellerProducts.map((item) => {
                     return <ProductItem key={item.pid} seller={true} item={item} updateProduct={updateCurrentProduct} />
                 })}

@@ -19,8 +19,7 @@ export default function BuyerDash() {
     return (
         <div className="bdash">
             <Navbar />
-            BuyerDash
-            <div className="container-md d-flex f-wrap">
+            <div className="row w-100 gx-2 gy-4 ps-2 pt-3 mb-3">
                 {allProducts.map((item) => {
                     // return <ProductItem key={item.pid} seller={false} category={item.category} name={item.name} price={item.price} quantity={item.quantity} description={item.description} />
                     return <ProductItem key={item.pid} seller={false} item={item} />

@@ -17,9 +17,10 @@ export default function ProductItem(props) {
     }, [item])
     // console.log('imageBase64------------>', (item.image ? Buffer.from(item.image.data).toString() : 'null'));
     return (
-        <div className="col-lg-3 col-md-4 col-sm-12">
+        <div className="col-xl-2 col-lg-3 col-md-4 col-sm-12">
             <div className="card">
-                <img src={item.image ? Buffer(item.image.data) : noImage} className="card-img-top" alt="..." />
+                {/* {(item.image ? JSON.stringify(item.image.data) : 'noImage')} */}
+                <img src={item.image ? Buffer(item.image) : noImage} className="card-img-top" alt="..." style={{ height: '10rem' }} />
                 <div className="card-body">
                     <h5 className="card-title">{item.name}</h5>
                     <p className="card-subtitle mb-1 text-muted">{category}</p>

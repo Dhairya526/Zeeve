@@ -39,7 +39,7 @@ const modifyProductPut = async (req, res) => {
         }
         const isIntendedUser = checkUserAndProduct(productId, userId);
         if (isIntendedUser) {
-            const updated = await modifyProduct(productId, constant.PRODUCT_CATEGORY[category], imageBase64, name, price, quantity, description, userId);
+            const updated = await modifyProduct(productId, constant.PRODUCT_CATEGORY[category], name, imageBase64, price, quantity, description, userId);
             if (updated) {
                 console.log('updated product');
                 res.json({ success: true });

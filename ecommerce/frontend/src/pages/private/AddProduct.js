@@ -14,7 +14,7 @@ export default function AddProduct() {
     const [errors, setErrors] = useState(initialErrors);
     const [category, setCategory] = useState('');
     const [name, setName] = useState('');
-    const [image, setImage] = useState(null);
+    const [image, setImage] = useState(undefined);
     const [price, setPrice] = useState('');
     const [quantity, setQuantity] = useState('');
     const [description, setDescription] = useState('');
@@ -45,7 +45,6 @@ export default function AddProduct() {
             }
             else {
                 const imageBase64 = image ? await encodeFileToBase64(image) : null;
-                console.log('#####', imageBase64);
                 const body = JSON.stringify({ category, name, imageBase64, price, quantity, description, userId });
                 const data = await addProductApi(body);
                 if (data.errors) {
@@ -90,12 +89,9 @@ export default function AddProduct() {
                 <input className="form-control" type="text" name="name" value={name} onChange={(e) => { setName(e.target.value) }} />
                 <p className="fs-6 alert-danger">{errors.name}</p>
 
-                {/* <div className="mb-3"> */}
                 <label htmlFor="formFile" className="form-label">Product Image</label>
                 <input className="form-control" type="file" id="formFile" onChange={(e) => { setImage(e.target.files[0]) }} />
                 <p className="fs-6 alert-danger">{errors.image}</p>
-
-                {/* </div> */}
 
                 <label className="form-label" htmlFor="price">Price</label>
                 <input className="form-control" type="text" name="price" value={price} onChange={(e) => { setPrice(e.target.value) }} />

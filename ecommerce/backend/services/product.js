@@ -35,13 +35,24 @@ const addProduct = async (category, name, imageBase64, price, quantity, descript
 const modifyProduct = async (productId, category, name, imageBase64, price, quantity, description, userId) => {
     try {
         const sqlDateTimeNow = new Date().toISOString().slice(0, 19).replace('T', ' ');
-        const query = 'UPDATE tbl_product SET category=?, name=?, image=?, price=?, quantity=?, description=?, modified_by=?, modified_at=? WHERE pid=? AND created_by=?;';
-        const [result, rows] = await dbPool.query(query, [category, name, imageBase64, price, quantity, description, userId, sqlDateTimeNow, productId, userId]);
-        // console.log('Updated', result);
-        return result.changedRows > 0;
+        if (imageBase64 == 'EXISTS') {
+            console.log('exists');
+            const query = 'UPDATE tbl_product SET category=?, name=?, price=?, quantity=?, description=?, modified_by=?, modified_at=? WHERE pid=? AND created_by=?;';
+            const [result] = await dbPool.query(query, [category, name, price, quantity, description, userId, sqlDateTimeNow, productId, userId]);
+            // console.log('Updated', result);
+            return result.changedRows > 0;
+        }
+        else {
+            console.log('new image');
+            const query = 'UPDATE tbl_product SET category=?, name=?, image=?, price=?, quantity=?, description=?, modified_by=?, modified_at=? WHERE pid=? AND created_by=?;';
+            const [result] = await dbPool.query(query, [category, name, imageBase64, price, quantity, description, userId, sqlDateTimeNow, productId, userId]);
+            // console.log('Updated', result);
+            return result.changedRows > 0;
+        }
+
     } catch (err) {
         console.log('err-------====>', err);
-        throw err;
+        throw Error('!modifyProduct');
     }
 }
 
@@ -54,7 +65,7 @@ const removeProduct = async (productId, userId) => {
     try {
         // const sqlDateTimeNow = new Date().toISOString().slice(0, 19).replace('T', ' ');
         const query = 'DELETE FROM tbl_product WHERE pid=? AND created_by=?;';
-        const [result, rows] = await dbPool.query(query, [productId, userId]);
+        const [result] = await dbPool.query(query, [productId, userId]);
         return result.affectedRows > 0;
     } catch (err) {
         console.log('err-------====>', err);
@@ -109,7 +120,6 @@ const getProducts = async (userId) => {
     try {
         const query = 'SELECT p.pid, m.code AS category, p.name, p.image, p.price, p.quantity, p.description FROM tbl_product AS p INNER JOIN mst_product_type AS m WHERE p.category = m.type_id AND p.created_by=?;';
         const [result] = await dbPool.query(query, [userId]);
-        console.log('%%%%%%%%%%%%%', result);
         return result;
     } catch (err) {
         console.log('err-------====>', err);

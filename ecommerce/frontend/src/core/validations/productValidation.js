@@ -28,10 +28,16 @@ export const productDetailsValidation = (categories, category, name, image, pric
     /**
      * Validate image extension
      */
-    if (image !== null) {
+    if (image !== undefined) {
+        console.log(image);
         const imgExt = image.type.split('/')[1];
-        if (!constant.imageExtensions.includes(imgExt))
-            errors.image = 'Invalid Image';
+        if (!constant.imageExtensions.includes(imgExt)) {
+            errors.image = 'Invalid Image Format';
+            console.log(image);
+        }
+    }
+    else if (image === null) {
+        console.log(image);
     }
     /**
      * Validate product price
