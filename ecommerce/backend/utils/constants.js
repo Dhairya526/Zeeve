@@ -14,6 +14,12 @@ const constant = {
         BUYER: 1,
         SELLER: 2,
     },
+    VERIFICATION: {
+        NONE: 0,
+        EMAIL: 1,
+        MOBILE: 2,
+        COMPLETE: 3
+    }
 };
 
 module.exports = { constant };

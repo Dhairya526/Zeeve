@@ -1,3 +1,5 @@
+const jwt = require('jsonwebtoken');
+
 const { dbPool } = require("../model/mysql.client");
 const { constant } = require("../utils/constants");
 const { generateSalt, hashPassword, verifyPassword } = require("../utils/crypto");
@@ -14,11 +16,11 @@ const { generateSalt, hashPassword, verifyPassword } = require("../utils/crypto"
 const registerUser = async (userType, fName, lName, email, password) => {
     try {
         const salt = generateSalt();
-        const passowrdHash = hashPassword(password, salt);
+        const passwordHash = hashPassword(password, salt);
         const sqlDateTimeNow = new Date().toISOString().slice(0, 19).replace('T', ' ');
         console.log(userType, fName, lName, email, password);
         const query = 'INSERT INTO tbl_user(type_id, first_name, last_name, email, password_salt, password_hash, created_at, modified_last) VALUES (?,?,?,?,?,?,?,?);';
-        const [result, rows] = await dbPool.query(query, [userType, fName, lName, email, salt, passowrdHash, sqlDateTimeNow, sqlDateTimeNow]);
+        const [result, rows] = await dbPool.query(query, [userType, fName, lName, email, salt, passwordHash, sqlDateTimeNow, sqlDateTimeNow]);
         // console.log('result', result);
         return result.insertId;
     } catch (err) {
@@ -74,7 +76,7 @@ const checkPassword = async (userType, email, password) => {
 const findUser = async (userType, userId) => {
     try {
         const user = {};
-        const query = 'SELECT uid, first_name, last_name FROM tbl_user WHERE uid=? AND type_id=?;';
+        const query = 'SELECT uid, type_id, email, first_name, last_name FROM tbl_user WHERE uid=? AND type_id=?;';
         const [result] = await dbPool.query(query, [userId, userType]);
         if (result.length > 0) {
             user.userId = result[0].uid;
@@ -98,7 +100,7 @@ const findUser = async (userType, userId) => {
 const userDetails = async (userId) => {
     try {
         const userData = {};
-        const query = 'SELECT  type_id, first_name, last_name, email FROM tbl_user WHERE uid=?;';
+        const query = 'SELECT  type_id, first_name, last_name, email, verified FROM tbl_user WHERE uid=?;';
         const [result] = await dbPool.query(query, [userId]);
         // console.log(result);
         if (result.length > 0) {
@@ -106,6 +108,7 @@ const userDetails = async (userId) => {
             userData.fName = result[0].first_name;
             userData.lName = result[0].last_name;
             userData.email = result[0].email;
+            userData.verified = Object.keys(constant.VERIFICATION).find(key => constant.VERIFICATION[key] === result[0].verified);
         }
         // console.log(userData);
         return userData;
@@ -132,6 +135,24 @@ const getUserId = async (userType, email) => {
     }
 }
 
+const verifyLink = async (key) => {
+    try {
+        const decodedToken = jwt.decode(key);
+        const userId = decodedToken.userId;
+        const query = 'SELECT password_hash FROM tbl_user WHERE uid=?;';
+        const [result] = await dbPool.query(query, [userId]);
+        const passwordHash = result[0].password_hash;
+        const verifiedToken = jwt.verify(key, passwordHash);
+        if (verifiedToken)
+            return true;
+        else
+            return false;
+    } catch (err) {
+        console.log('error--------->', err);
+        throw err;
+    }
+}
+
 // const  = async (userType, email) => {
 //     try {
 // const [result]=await dbPool.query();
@@ -149,4 +170,5 @@ module.exports = {
     findUser,
     userDetails,
     getUserId,
+    verifyLink,
 };

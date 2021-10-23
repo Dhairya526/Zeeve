@@ -3,6 +3,7 @@ import { Route, Redirect } from 'react-router-dom';
 import { fetchUserDataApi } from '../core/services/api';
 import { decodeToken, getAccessToken, removeAccessToken } from '../core/utils/tokenHandler';
 import { Store } from '../provider/Store';
+// import LoadingSpinnerModal from '../components/LoadingSpinnerModal';
 
 const PrivateRoute = ({ path, sellerComponent: SellerComponent, buyerComponent: BuyerComponent, ...props }) => {
     console.log('private route');
@@ -18,7 +19,7 @@ const PrivateRoute = ({ path, sellerComponent: SellerComponent, buyerComponent: 
                 const decodedjwtToken = decodeToken(jwtToken);
                 if (decodedjwtToken) {
                     const latestUserData = await fetchUserDataApi(decodedjwtToken.userId);
-                    setUserData(latestUserData);
+                    setUserData(latestUserData.userData);
                     setuserType(decodedjwtToken.userType);
                     setisAuth(true);
                     setloading(false);
@@ -49,6 +50,7 @@ const PrivateRoute = ({ path, sellerComponent: SellerComponent, buyerComponent: 
     }
 
     if (loading) {
+        // <LoadingSpinnerModal />
         return (
             <div>Loading...</div>
         )

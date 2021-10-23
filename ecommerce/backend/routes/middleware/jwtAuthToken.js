@@ -21,7 +21,7 @@ const validateUser = async (req, res, next) => {
             try {
                 const decodedToken = jwt.verify(token, config.jwtKey);
                 const user = await findUser(constant.USER[decodedToken.userType], decodedToken.userId);
-                if (user !== {}) {
+                if (Object.keys(user).length > 0) {
                     res.user = user;
                     next();
                 }

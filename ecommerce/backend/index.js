@@ -5,7 +5,7 @@ const authRoutes = require('./routes/auth.route')
 const sellerRoutes = require('./routes/seller.route');
 const buyerRoutes = require('./routes/buyer.route');
 const { validateUser } = require('./routes/middleware/jwtAuthToken');
-
+const { transporter } = require('./model/nodemailer.client')
 const app = express();
 
 app.use(cors());

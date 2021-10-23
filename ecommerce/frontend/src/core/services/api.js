@@ -51,6 +51,24 @@ export const fetchUserDataApi = async (id) => {
     return data;
 }
 
+export const verifyEmailApi = async (method) => {
+    console.log('verifyEmailApi');
+    const response = await fetch(config.authApi + `/verify/email/${method}`, {
+        method: "GET",
+        headers: { "jwt": authToken },
+    });
+    const data = await response.json();
+    return data;
+}
+
+export const confirmEmailApi = async (path) => {
+    console.log('verifyEmailApi');
+    const response = await fetch(config.authApi + path, {
+        method: "GET",
+    });
+    const data = await response.json();
+    return data;
+}
 // **************************************************************************
 //                                 Buyer APIs
 // **************************************************************************
