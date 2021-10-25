@@ -10,7 +10,7 @@ const { handleErrors } = require('../../utils/errorHandler');
  * @returns {string} JWT token
  */
 const generateJwtToken = (data) => {
-    const token = jwt.sign(data, config.jwtKey, { expiresIn: config.jwtTokenExpiery });
+    const token = jwt.sign(data, config.jwtKey, { expiresIn: config.jwtTokenExpiry });
     return token;
 }
 

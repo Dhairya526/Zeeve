@@ -8,15 +8,11 @@ import { Store } from '../../provider/Store';
 function Login() {
     const history = useHistory();
     const { setUserData } = useContext(Store);
-    const initialErrors = {
-        login: "",
-        email: "",
-        password: "",
-    }
+    const initialErrors = { login: "", email: "", password: "" };
+    const [errors, setErrors] = useState(initialErrors);
     const [userType, setUserType] = useState('BUYER');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [errors, setErrors] = useState(initialErrors);
     const loginUser = async (e) => {
         try {
             e.preventDefault();

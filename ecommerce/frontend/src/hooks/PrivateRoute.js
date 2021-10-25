@@ -3,7 +3,6 @@ import { Route, Redirect } from 'react-router-dom';
 import { fetchUserDataApi } from '../core/services/api';
 import { decodeToken, getAccessToken, removeAccessToken } from '../core/utils/tokenHandler';
 import { Store } from '../provider/Store';
-// import LoadingSpinnerModal from '../components/LoadingSpinnerModal';
 
 const PrivateRoute = ({ path, sellerComponent: SellerComponent, buyerComponent: BuyerComponent, ...props }) => {
     console.log('private route');
@@ -50,7 +49,6 @@ const PrivateRoute = ({ path, sellerComponent: SellerComponent, buyerComponent: 
     }
 
     if (loading) {
-        // <LoadingSpinnerModal />
         return (
             <div>Loading...</div>
         )

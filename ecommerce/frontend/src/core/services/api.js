@@ -41,9 +41,13 @@ export const loginApi = async (payload) => {
     return data;
 }
 
+// **************************************************************************
+//                              User APIs
+// **************************************************************************
+
 export const fetchUserDataApi = async (id) => {
     console.log('fetchUserDataApi');
-    const response = await fetch(config.authApi + `/userDetails/${id}`, {
+    const response = await fetch(config.userApi + `/userDetails/${id}`, {
         method: "GET",
         headers: { "jwt": authToken },
     });
@@ -51,9 +55,23 @@ export const fetchUserDataApi = async (id) => {
     return data;
 }
 
+export const modifyUserApi = async (uid, payload) => {
+    console.log('modifyUserApi');
+    const response = await fetch(config.userApi + `/modifyUser/${uid}`, {
+        method: "PUT",
+        headers: {
+            "Content-type": "application/json",
+            "jwt": authToken
+        },
+        body: payload,
+    });
+    const data = await response.json();
+    return data;
+}
+
 export const verifyEmailApi = async (method) => {
     console.log('verifyEmailApi');
-    const response = await fetch(config.authApi + `/verify/email/${method}`, {
+    const response = await fetch(config.userApi + `/verify/email/${method}`, {
         method: "GET",
         headers: { "jwt": authToken },
     });
@@ -62,13 +80,42 @@ export const verifyEmailApi = async (method) => {
 }
 
 export const confirmEmailApi = async (path) => {
-    console.log('verifyEmailApi');
-    const response = await fetch(config.authApi + path, {
+    console.log('confirmEmailApi');
+    const response = await fetch(config.userApi + path, {
         method: "GET",
     });
     const data = await response.json();
     return data;
 }
+
+export const confirmOtpApi = async (payload) => {
+    console.log('confirmOtpApi');
+    const response = await fetch(config.userApi + '/confirm/email/otp', {
+        method: "POST",
+        headers: {
+            "Content-type": "application/json",
+            "jwt": authToken
+        },
+        body: payload,
+    });
+    const data = await response.json();
+    return data;
+}
+
+export const requestChangePasswordApi = async (payload) => {
+    console.log('requestChangePasswordApi');
+    const response = await fetch(config.userApi + '/confirm/email/otp', {
+        method: "POST",
+        headers: {
+            "Content-type": "application/json",
+            "jwt": authToken
+        },
+        body: payload,
+    });
+    const data = await response.json();
+    return data;
+}
+
 // **************************************************************************
 //                                 Buyer APIs
 // **************************************************************************
@@ -102,7 +149,7 @@ export const sellerProductsApi = async (uid) => {
         const data = await response.json();
         return data;
     } catch (error) {
-
+        console.log('Error', error);
     }
 
 }

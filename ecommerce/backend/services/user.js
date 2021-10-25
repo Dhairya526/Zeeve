@@ -18,9 +18,9 @@ const registerUser = async (userType, fName, lName, email, password) => {
         const salt = generateSalt();
         const passwordHash = hashPassword(password, salt);
         const sqlDateTimeNow = new Date().toISOString().slice(0, 19).replace('T', ' ');
-        console.log(userType, fName, lName, email, password);
+        // console.log(userType, fName, lName, email, password);
         const query = 'INSERT INTO tbl_user(type_id, first_name, last_name, email, password_salt, password_hash, created_at, modified_last) VALUES (?,?,?,?,?,?,?,?);';
-        const [result, rows] = await dbPool.query(query, [userType, fName, lName, email, salt, passwordHash, sqlDateTimeNow, sqlDateTimeNow]);
+        const [result] = await dbPool.query(query, [userType, fName, lName, email, salt, passwordHash, sqlDateTimeNow, sqlDateTimeNow]);
         // console.log('result', result);
         return result.insertId;
     } catch (err) {
@@ -118,6 +118,18 @@ const userDetails = async (userId) => {
     }
 }
 
+const modifyUserDetails = async (userId, fName, lName, email) => {
+    try {
+        const query = 'UPDATE tbl_user SET first_name=?, last_name=?, email=?, verified=? WHERE uid=? ;';
+        const [result] = await dbPool.query(query, [fName, lName, email, 0, userId]);
+        // console.log(result);
+        return result.changedRows > 0;
+    } catch (err) {
+        console.log('error--------->', err);
+        throw err;
+    }
+}
+
 /**
  * Returns the user id associated with the giver userType and email
  * @param {*} userType 
@@ -135,27 +147,99 @@ const getUserId = async (userType, email) => {
     }
 }
 
-const verifyLink = async (key) => {
+const verifyToken = async (token) => {
     try {
-        const decodedToken = jwt.decode(key);
+        const decodedToken = jwt.decode(token);
         const userId = decodedToken.userId;
         const query = 'SELECT password_hash FROM tbl_user WHERE uid=?;';
         const [result] = await dbPool.query(query, [userId]);
         const passwordHash = result[0].password_hash;
-        const verifiedToken = jwt.verify(key, passwordHash);
-        if (verifiedToken)
-            return true;
+        const verifiedToken = jwt.verify(token, passwordHash);
+        if (verifiedToken) {
+            return [true, userId];
+        }
         else
             return false;
     } catch (err) {
         console.log('error--------->', err);
-        throw err;
+        throw Error('!token');
     }
 }
 
-// const  = async (userType, email) => {
+const verifyLink = async (token) => {
+    try {
+        const [validToken, userId] = await verifyToken(token);
+        if (validToken) {
+            const sqlDateTimeNow = new Date().toISOString().slice(0, 19).replace('T', ' ');
+            const query = 'UPDATE tbl_user SET verified=?, modified_last=? WHERE uid=?;';
+            const [result] = await dbPool.query(query, [1, sqlDateTimeNow, userId]);
+            return true;
+        }
+        else
+            return false;
+    } catch (err) {
+        console.log('error--------->', err);
+        throw Error('!verify');
+    }
+}
+
+const verifyOtp = async (userId, otp) => {
+    try {
+        const sqlDateTimeNow = new Date().toISOString().slice(0, 19).replace('T', ' ');
+        const query = 'SELECT otp, generated_at FROM tbl_otp WHERE uid=?;';
+        const [result] = await dbPool.query(query, [userId]);
+        if (otp == result[result.length - 1].otp) {
+            const otpDateTime = result[result.length - 1].generated_at;
+            const difference = new Date(sqlDateTimeNow) - new Date(otpDateTime);
+            if (difference < 900000) {
+                const query = 'UPDATE tbl_user SET verified=?, modified_last=? WHERE uid=?;';
+                const [result] = await dbPool.query(query, [1, sqlDateTimeNow, userId]);
+                const query2 = 'UPDATE tbl_otp SET used=? WHERE uid=? AND otp=?;';
+                const [result2] = await dbPool.query(query2, [1, userId, otp]);
+                if (result.affectedRows > 0)
+                    return true;
+                else
+                    return false;
+            } else
+                return false;
+        } else
+            return false;
+
+    } catch (err) {
+        console.log('error--------->', err);
+        throw Error('!verify');
+    }
+}
+
+const resetPassword = async (token) => {
+    try {
+        const decodedToken = jwt.decode(token);
+        const userId = decodedToken.userId;
+        const query = 'SELECT password_hash FROM tbl_user WHERE uid=?;';
+        const [result] = await dbPool.query(query, [userId]);
+        const passwordHash = result[0].password_hash;
+        const verifiedToken = jwt.verify(token, passwordHash);
+        if (verifiedToken) {
+            // const salt = generateSalt();
+            // const passwordHash = hashPassword(password, salt);
+            // const sqlDateTimeNow = new Date().toISOString().slice(0, 19).replace('T', ' ');
+            // const query = 'UPDATE tbl_user SET password_salt=?, password_hash=?, modified_last=? WHERE uid=?;';
+            // const [result] = await dbPool.query(query, [salt, passwordHash, sqlDateTimeNow, userId]);
+            return true;
+        }
+        else
+            return false;
+    } catch (err) {
+        console.log('error--------->', err);
+        throw Error('!verify');
+    }
+}
+
+
+// const  = async () => {
 //     try {
-// const [result]=await dbPool.query();
+// const query='';
+// const [result]=await dbPool.query(query,[]);
 //     } catch (err) {
 //         console.log('error--------->', err);
 //         throw err;
@@ -169,6 +253,8 @@ module.exports = {
     checkPassword,
     findUser,
     userDetails,
+    modifyUserDetails,
     getUserId,
     verifyLink,
+    verifyOtp
 };

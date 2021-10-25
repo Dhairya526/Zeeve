@@ -13,6 +13,7 @@ import PageNotFound from './pages/PageNotFound';
 import Profile from './pages/private/Profile';
 import EditProfile from './pages/private/EditProfile';
 import VerifyEmailLink from './pages/public/VerifyEmailLink';
+import ChangePassword from './pages/public/ChangePassword';
 
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
 
           {/* default route and not found route */}
           <Route exact path='/confirm/email/link/:key' component={VerifyEmailLink} />
+          <Route exact path='/reset/password/:token' component={ChangePassword} />
           <Route path="/404" exact component={PageNotFound} />
           <Route component={PageNotFound} />
         </Switch>

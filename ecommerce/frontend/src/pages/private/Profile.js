@@ -11,6 +11,7 @@ function Profile() {
     const initialUser = { userType: '', fName: '', lName: '', email: '', verified: '' };
     const [user, setUser] = useState(initialUser);
     const [mailSent, setMailSent] = useState(false);
+    const [mailRequested, setMailRequested] = useState(false);
     const openOtpModal = useRef(null);
     const history = useHistory();
 
@@ -23,23 +24,37 @@ function Profile() {
         try {
             const data = await verifyEmailApi('link');
             if (data.success) {
-                alert('Link sent to your mail.\nPlease verify.');
                 setMailSent(true);
+                alert(`Link sent to "${user.email}".\nPlease verify.`);
             }
         } catch (err) {
-
+            console.log('Error', err);
         }
-
     };
 
-    const verifyEmailOtp = () => {
+    const verifyEmailOtp = async () => {
         console.log('being otp verified');
-        openOtpModal.current.click();
+        try {
+            const data = await verifyEmailApi('otp');
+            if (data.success) {
+                setMailSent(true);
+                alert(`OTP sent to "${user.email}".`);
+                openOtpModal.current.click();
+            }
+        } catch (err) {
+            console.log('Error', err);
+        }
     };
+
+    const changePassword = () => {
+
+    };
+
     return (
         <div className="profilePage">
             <Navbar />
             <OtpVerifyModal openModal={openOtpModal} />
+            {/* {JSON.stringify(user)} */}
             <div className="container-sm mt-5 align-middle">
                 <div className="row my-3">
                     <p className="col-6 text-end">User Profile :</p>
@@ -55,22 +70,28 @@ function Profile() {
                 </div>
                 <div className="row my-3">
                     <p className="col-6 text-end">Email :</p>
-                    <p className="col-6">{user.email}</p>
+                    <p className="col-6">{user.email} {user.verified === constant.verification.EMAIL && <span><i className="text-success bi bi-patch-check-fill" /></span>}</p>
                 </div>
                 {
                     user.verified === constant.verification.NONE &&
                     <div className="row my-5 justify-content-evenly">
                         {mailSent
-                            ? <button disabled className="col-4 btn btn-success"> <i class="bi bi-check-circle"></i>  Link Sent</button>
+                            ? <button disabled className="col-4 btn btn-success"> <i className="bi bi-check-circle"></i>  Mail Sent</button>
                             : <>
-                                <button onClick={verifyEmailLink} className="col-3 btn btn-secondary">Verify email via link</button>
-                                <button onClick={verifyEmailOtp} className="col-3 btn btn-secondary">Verify email via OTP</button>
+                                <button disabled={mailRequested} onClick={() => { setMailRequested(true); verifyEmailLink(); }} className="col-3 btn btn-secondary">
+                                    {mailRequested && <div className="spinner-border spinner-border-sm" role="status" />}
+                                    Verify email via link
+                                </button>
+                                <button disabled={mailRequested} onClick={() => { setMailRequested(true); verifyEmailOtp(); }} className="col-3 btn btn-secondary">
+                                    {mailRequested && <div className="spinner-border spinner-border-sm" role="status" />}
+                                    Verify email via OTP
+                                </button>
                             </>}
                     </div>
 
                 }
                 <div className="row my-5 justify-content-center">
-                    <button className="col-4 btn btn-success">Change Password</button>
+                    <button onClick={changePassword} className="col-4 btn btn-success">Change Password</button>
                 </div>
                 <div className="row mt-5 justify-content-center">
                     <button onClick={() => history.push('/editProfile')} className="col-4 btn btn-primary">Edit Profile</button>
