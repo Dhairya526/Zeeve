@@ -162,7 +162,7 @@ const verifyToken = async (token) => {
             return false;
     } catch (err) {
         console.log('error--------->', err);
-        throw Error('!token');
+        throw Error('!access');
     }
 }
 
@@ -211,27 +211,20 @@ const verifyOtp = async (userId, otp) => {
     }
 }
 
-const resetPassword = async (token) => {
+const resetPassword = async (userId, password) => {
     try {
-        const decodedToken = jwt.decode(token);
-        const userId = decodedToken.userId;
-        const query = 'SELECT password_hash FROM tbl_user WHERE uid=?;';
-        const [result] = await dbPool.query(query, [userId]);
-        const passwordHash = result[0].password_hash;
-        const verifiedToken = jwt.verify(token, passwordHash);
-        if (verifiedToken) {
-            // const salt = generateSalt();
-            // const passwordHash = hashPassword(password, salt);
-            // const sqlDateTimeNow = new Date().toISOString().slice(0, 19).replace('T', ' ');
-            // const query = 'UPDATE tbl_user SET password_salt=?, password_hash=?, modified_last=? WHERE uid=?;';
-            // const [result] = await dbPool.query(query, [salt, passwordHash, sqlDateTimeNow, userId]);
+        const salt = generateSalt();
+        const passwordHash = hashPassword(password, salt);
+        const sqlDateTimeNow = new Date().toISOString().slice(0, 19).replace('T', ' ');
+        const query = 'UPDATE tbl_user SET password_salt=?, password_hash=?, modified_last=? WHERE uid=?;';
+        const [result] = await dbPool.query(query, [salt, passwordHash, sqlDateTimeNow, userId]);
+        if (result.affectedRows == 1)
             return true;
-        }
         else
             return false;
     } catch (err) {
         console.log('error--------->', err);
-        throw Error('!verify');
+        throw Error('!changePassword');
     }
 }
 
@@ -255,6 +248,8 @@ module.exports = {
     userDetails,
     modifyUserDetails,
     getUserId,
+    verifyToken,
     verifyLink,
-    verifyOtp
+    verifyOtp,
+    resetPassword
 };

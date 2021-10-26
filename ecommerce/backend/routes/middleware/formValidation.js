@@ -5,6 +5,7 @@ const userNameRegex = /^[a-zA-Z]{1,15}$/;
 const productNameRegex = /^[a-zA-Z0-9 ]{1,50}$/;
 const productPriceRegex = /(^0\.\d{1,2}$)|(^[1-9]\d{0,8}(\.\d{1,2})?$)/;
 const productQuantityRegex = /^[0-9]+$/;
+const otpRegex = /^[1-9]\d{0,5}$/;
 
 /**
  * Validate user registration details
@@ -159,9 +160,112 @@ const productDetailsValidation = (req, res, next) => {
         next();
 }
 
+/**
+ * Validate user registration details
+ * @param {Request} req 
+ * @param {Response} res 
+ * @param {Function} next 
+ */
+const userUpdateValidation = (req, res, next) => {
+    const errors = {};
+    const { fName, lName, email } = req.body;
+    /**
+     * Checking errors in first name
+     */
+    if (fName === '')
+        errors.fName = 'First name cannot be empty';
+    else if (!userNameRegex.test(fName))
+        errors.fName = 'Enter valid name';
+    else if (fName.length > 15)
+        errors.fName = 'First name can have maximum of 15 characters';
+    /**
+     * Checking errors in last name
+     */
+    if (lName === '')
+        errors.lName = 'Last name cannot be empty';
+    else if (!userNameRegex.test(lName))
+        errors.lName = 'Enter valid name';
+    else if (lName.length > 15)
+        errors.lName = 'Last name can have maximum of 15 characters';
+    /**
+     * Checking errors in email
+     */
+    if (email === '')
+        errors.email = 'Email cannot be empty';
+    else {
+        if (!emailRegex.test(email))
+            errors.email = 'Invalid email';
+    }
+    /**
+     * If there are errors then send them in response object
+     * If there are no errors then continue
+     */
+    if (Object.keys(errors).length !== 0)
+        res.json({ errors });
+    else
+        next();
+}
+
+/**
+ * Validate user registration details
+ * @param {Request} req 
+ * @param {Response} res 
+ * @param {Function} next 
+ */
+const otpValidation = (req, res, next) => {
+    const errors = {};
+    const { otp } = req.body;
+    /**
+     * Checking errors in OTP
+     */
+    if (otp === '')
+        errors.otp = 'OTP cannot be empty';
+    else if (!otpRegex.test(otp))
+        errors.otp = 'Invalid OTP';
+    /**
+     * If there are errors then send them in response object
+     * If there are no errors then continue
+     */
+    if (Object.keys(errors).length !== 0)
+        res.json({ errors });
+    else
+        next();
+}
+
+/**
+ * Validate user registration details
+ * @param {Request} req 
+ * @param {Response} res 
+ * @param {Function} next 
+ */
+const passwordValidation = (req, res, next) => {
+    const errors = {};
+    const { password } = req.body;
+    /**
+     * Checking errors in password
+     */
+    if (password === '')
+        errors.password = 'Password cannot be empty';
+    else if (password.length < 6)
+        errors.password = 'Password should have minimum of 6 characters';
+    else if (password.length > 15)
+        errors.password = 'Password should have maximum of 15 characters';
+    /**
+     * If there are errors then send them in response object
+     * If there are no errors then continue
+     */
+    if (Object.keys(errors).length !== 0)
+        res.json({ errors });
+    else
+        next();
+}
+
 
 module.exports = {
     userLoginValidation,
     userRegisterValidation,
     productDetailsValidation,
+    userUpdateValidation,
+    otpValidation,
+    passwordValidation
 };

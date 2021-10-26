@@ -112,3 +112,18 @@ export const otpValidation = (otp) => {
 
     return errors;
 }
+
+export const passwordValidation = (password) => {
+    const errors = {};
+    /**
+     * Checking errors in password
+     */
+    if (password === '')
+        errors.password = 'Password cannot be empty';
+    else if (password.length < 6)
+        errors.password = 'Password should have minimum of 6 characters';
+    else if (password.length > 15)
+        errors.password = 'Password should have maximum of 15 characters';
+
+    return errors;
+}

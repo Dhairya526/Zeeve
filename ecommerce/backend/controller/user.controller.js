@@ -99,7 +99,6 @@ const confirmEmailOtpPost = async (req, res) => {
 }
 
 const resetPasswordGet = async (req, res) => {
-    console.log(req.params);
     try {
         const email = res.user.email;
         const userId = res.user.userId;
@@ -119,7 +118,7 @@ const resetPasswordGet = async (req, res) => {
 const verifyTokenGet = async (req, res) => {
     try {
         const token = req.params.token;
-        const verified = await verifyToken(token);
+        const [verified] = await verifyToken(token);
         if (verified)
             return res.json({ success: true });
         else
@@ -135,9 +134,14 @@ const setNewPasswordPost = async (req, res) => {
     try {
         const { password } = req.body;
         const token = req.params.token;
-        const passwordChanged = await resetPassword(token, password);
-        if (passwordChanged)
-            return res.json({ success: true });
+        const [verified, userId] = await verifyToken(token);
+        if (verified) {
+            const passwordChanged = await resetPassword(userId, password);
+            if (passwordChanged)
+                return res.json({ success: true });
+            else
+                return res.json({ success: false });
+        }
         else
             return res.json({ success: false });
     } catch (err) {

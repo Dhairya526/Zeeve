@@ -4,7 +4,7 @@ import { constant } from '../../core/utils/constants';
 import { useHistory } from 'react-router';
 import Navbar from '../../components/Navbar';
 import OtpVerifyModal from '../../components/OtpVerifyModal';
-import { verifyEmailApi } from '../../core/services/api';
+import { requestChangePasswordApi, verifyEmailApi } from '../../core/services/api';
 
 function Profile() {
     const { userData } = useContext(Store);
@@ -12,6 +12,8 @@ function Profile() {
     const [user, setUser] = useState(initialUser);
     const [mailSent, setMailSent] = useState(false);
     const [mailRequested, setMailRequested] = useState(false);
+    const [passwordMailSent, setPasswordMailSent] = useState(false);
+    const [passwordMailRequested, setPasswordMailRequested] = useState(false);
     const openOtpModal = useRef(null);
     const history = useHistory();
 
@@ -46,8 +48,17 @@ function Profile() {
         }
     };
 
-    const changePassword = () => {
-
+    const changePassword = async () => {
+        console.log('Password change initiated');
+        try {
+            const data = await requestChangePasswordApi();
+            if (data.success) {
+                setPasswordMailSent(true);
+                alert(`Reset link sent to "${user.email}".`);
+            }
+        } catch (err) {
+            console.log('Error', err);
+        }
     };
 
     return (
@@ -91,7 +102,14 @@ function Profile() {
 
                 }
                 <div className="row my-5 justify-content-center">
-                    <button onClick={changePassword} className="col-4 btn btn-success">Change Password</button>
+                    {passwordMailSent
+                        ? <button disabled className="col-4 btn btn-success"> <i className="bi bi-check-circle"></i>  Mail Sent</button>
+                        :
+                        <button disabled={passwordMailRequested} onClick={() => { setPasswordMailRequested(true); changePassword(); }} className="col-3 btn btn-primary">
+                            {mailRequested && <div className="spinner-border spinner-border-sm" role="status" />}
+                            Change Password
+                        </button>
+                    }
                 </div>
                 <div className="row mt-5 justify-content-center">
                     <button onClick={() => history.push('/editProfile')} className="col-4 btn btn-primary">Edit Profile</button>

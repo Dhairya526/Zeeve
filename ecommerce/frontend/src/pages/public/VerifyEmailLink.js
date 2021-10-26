@@ -25,14 +25,14 @@ const VerifyEmailLink = () => {
         // eslint-disable-next-line
     }, [])
     if (!verified)
-        return <LoadingPage message="Verifying..." spinner={true} />
+        return <LoadingPage message="Verifying..." spinner={true} />;
     if (verified)
         return (
             <div className="container my-auto text-center">
                 <p>Verified successfully</p>
                 <button className="btn btn-primary" onClick={() => history.replace('/dashboard')}>Go to Home</button>
             </div>
-        )
+        );
 }
 
 export default VerifyEmailLink

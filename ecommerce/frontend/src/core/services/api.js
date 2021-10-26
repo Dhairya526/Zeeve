@@ -1,13 +1,7 @@
-import { Redirect } from "react-router-dom";
 import config from "../../config/config";
-import { getAccessToken, removeAccessToken } from "../utils/tokenHandler";
+import { getAccessToken } from "../utils/tokenHandler";
 
 const authToken = getAccessToken();
-const logout = () => {
-    alert('Unathorized Access!!!');
-    removeAccessToken();
-    return <Redirect to='/' />;
-}
 
 // **************************************************************************
 //                              Authentication APIs
@@ -102,9 +96,28 @@ export const confirmOtpApi = async (payload) => {
     return data;
 }
 
-export const requestChangePasswordApi = async (payload) => {
+export const requestChangePasswordApi = async () => {
     console.log('requestChangePasswordApi');
-    const response = await fetch(config.userApi + '/confirm/email/otp', {
+    const response = await fetch(config.userApi + '/resetPassword', {
+        method: "GET",
+        headers: { "jwt": authToken },
+    });
+    const data = await response.json();
+    return data;
+}
+
+export const confirmTokenApi = async (token) => {
+    console.log('confirmTokenApi');
+    const response = await fetch(config.userApi + `/verifyToken/${token}`, {
+        method: "GET",
+    });
+    const data = await response.json();
+    return data;
+}
+
+export const setChangePassword = async (token, payload) => {
+    console.log('setChangePassword');
+    const response = await fetch(config.userApi + `/resetPassword/${token}`, {
         method: "POST",
         headers: {
             "Content-type": "application/json",
@@ -115,7 +128,6 @@ export const requestChangePasswordApi = async (payload) => {
     const data = await response.json();
     return data;
 }
-
 // **************************************************************************
 //                                 Buyer APIs
 // **************************************************************************
@@ -159,15 +171,9 @@ export const productCategoriesApi = async () => {
         console.log('productCategoriesApi');
         const response = await fetch(config.sellerApi + '/getCategories', {
             method: "GET",
-            // headers: { "jwt": `${authToken}w` },s
             headers: { "jwt": authToken },
         });
         const data = await response.json();
-        if (data.errors)
-            if (data.errors.access) {
-                console.log(data.errors);
-                logout();
-            }
         return data;
     } catch (error) {
         console.log('errrrrrrrrr', error);
