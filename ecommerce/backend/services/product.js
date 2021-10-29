@@ -63,10 +63,12 @@ const modifyProduct = async (productId, category, name, imageBase64, price, quan
  */
 const removeProduct = async (productId, userId) => {
     try {
-        // const sqlDateTimeNow = new Date().toISOString().slice(0, 19).replace('T', ' ');
+        const nameQuery = 'SELECT name FROM tbl_product WHERE pid=? AND created_by=?;';
+        const [name] = await dbPool.query(nameQuery, [productId, userId]);
+        console.log('anem', name[0].name);
         const query = 'DELETE FROM tbl_product WHERE pid=? AND created_by=?;';
         const [result] = await dbPool.query(query, [productId, userId]);
-        return result.affectedRows > 0;
+        return [result.affectedRows > 0, name[0].name];
     } catch (err) {
         console.log('err-------====>', err);
         throw err;
@@ -74,7 +76,7 @@ const removeProduct = async (productId, userId) => {
 }
 
 /**
- * Returns all ath categories available
+ * Returns all the categories available
  * @returns {object} category object
  */
 const getProductCategories = async () => {

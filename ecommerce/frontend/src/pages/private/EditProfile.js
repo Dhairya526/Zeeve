@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Store } from '../../provider/Store';
-import Navbar from '../../components/Navbar';
+import Navbar from '../../components/header/Navbar';
 import { useHistory } from 'react-router';
 import { userUpdateValidation } from '../../core/validations/authValidation';
 import { modifyUserApi } from '../../core/services/api';

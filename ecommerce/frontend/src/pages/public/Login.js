@@ -3,7 +3,7 @@ import { Link, useHistory } from 'react-router-dom';
 import { loginApi } from '../../core/services/api';
 import { setAccessToken } from '../../core/utils/tokenHandler';
 import { userLoginValidation } from '../../core/validations/authValidation';
-import { Store } from '../../provider/Store';
+import { connectSocket, Store } from '../../provider/Store';
 
 function Login() {
     const history = useHistory();
@@ -37,6 +37,7 @@ function Login() {
                 else if (data.token) {
                     setAccessToken(data.token);
                     setUserData(data.user);
+                    connectSocket();
                     history.push('/dashboard');
                 }
             }

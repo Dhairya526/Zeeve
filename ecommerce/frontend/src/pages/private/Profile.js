@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react'
 import { Store } from '../../provider/Store';
 import { constant } from '../../core/utils/constants';
 import { useHistory } from 'react-router';
-import Navbar from '../../components/Navbar';
+import Navbar from '../../components/header/Navbar';
 import OtpVerifyModal from '../../components/OtpVerifyModal';
 import { requestChangePasswordApi, verifyEmailApi } from '../../core/services/api';
 
@@ -112,7 +112,7 @@ function Profile() {
                     }
                 </div>
                 <div className="row mt-5 justify-content-center">
-                    <button onClick={() => history.push('/editProfile')} className="col-4 btn btn-primary">Edit Profile</button>
+                    <button onClick={() => history.push('/editProfile')} className="col-3 btn btn-primary">Edit Profile</button>
                 </div>
             </div>
         </div>

@@ -1,6 +1,7 @@
 const { userDetails, modifyUserDetails, verifyLink, verifyToken, resetPassword, verifyOtp } = require("../services/user");
 const { handleErrors } = require("../utils/errorHandler");
 const { sendVerificationLink, sendVerificationOtp, sendPasswordResetLink } = require("../services/nodeMailer");
+const { emitNotification } = require("../services/socket");
 
 
 const userDetailsGet = async (req, res) => {
@@ -20,13 +21,14 @@ const userDetailsGet = async (req, res) => {
 
 const modifyUserPut = async (req, res) => {
     try {
-        console.log(req.params.uid, '______', res.user.userId);
         const userId = req.params.uid;
         if (userId == res.user.userId) {
             const { fName, lName, email } = req.body;
             const isModified = await modifyUserDetails(userId, fName, lName, email);
-            if (isModified)
+            if (isModified) {
                 res.json({ success: true });
+                emitNotification(userId, 'User details changed.\nPlease verify your email.')
+            }
             else
                 throw Error('!modifyUser');
         } else
@@ -137,8 +139,10 @@ const setNewPasswordPost = async (req, res) => {
         const [verified, userId] = await verifyToken(token);
         if (verified) {
             const passwordChanged = await resetPassword(userId, password);
-            if (passwordChanged)
+            if (passwordChanged) {
+                emitNotification(userId, 'Changed Password')
                 return res.json({ success: true });
+            }
             else
                 return res.json({ success: false });
         }

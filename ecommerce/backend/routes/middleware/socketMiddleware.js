@@ -1,28 +1,18 @@
 const jwt = require('jsonwebtoken');
-const { config } = require('../../config');
+const { config } = require("../../config");
 const { findUser } = require('../../services/user');
 const { constant } = require('../../utils/constants');
-const { handleErrors } = require('../../utils/errorHandler');
 
-/**
- * Generates and returns a JWT token
- * @param {object} data 
- * @returns {string} JWT token
- */
-const generateJwtToken = (data) => {
-    const token = jwt.sign(data, config.jwtKey, { expiresIn: config.jwtTokenExpiry });
-    return token;
-}
-
-const validateUser = async (req, res, next) => {
+const jwtSocket = async (socket, next) => {
+    console.log('middleware');
     try {
-        const token = req.header('jwt');
+        const token = socket.handshake.auth.jwtToken;
         if (token) {
             try {
                 const decodedToken = jwt.verify(token, config.jwtKey);
                 const user = await findUser(constant.USER[decodedToken.userType], decodedToken.userId);
                 if (Object.keys(user).length > 0) {
-                    res.user = user;
+                    socket.user = user;
                     next();
                 }
                 else
@@ -33,11 +23,7 @@ const validateUser = async (req, res, next) => {
             }
         } else throw Error('!access')
     } catch (error) {
-        console.log('jwt error---->', error);
-        const errors = handleErrors(error);
-        res.json({ errors });
-    }
+        console.log('jwt error---->', error.message);
+    };
 }
-
-
-module.exports = { generateJwtToken, validateUser };
+module.exports = { jwtSocket };

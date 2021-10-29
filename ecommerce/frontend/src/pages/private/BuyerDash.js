@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import Navbar from '../../components/Navbar';
+import Navbar from '../../components/header/Navbar';
 import ProductItem from '../../components/product/ProductItem';
 import { productCategoriesApi, productsApi } from '../../core/services/api';
 import { Store } from '../../provider/Store';

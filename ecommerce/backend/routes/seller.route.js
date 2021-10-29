@@ -3,7 +3,6 @@ const {
     modifyProductPut,
     removeProductDelete,
     getCategoriesGet,
-    getProfileGet,
     getProductsGet
 } = require('../controller/seller.controller');
 const { productDetailsValidation } = require('./middleware/formValidation');
@@ -17,8 +16,6 @@ router.put('/modifyProduct/:pid', productDetailsValidation, modifyProductPut);
 router.delete('/removeProduct/:pid', removeProductDelete);
 
 router.get('/getCategories', getCategoriesGet);
-
-router.get('/profile', getProfileGet);
 
 router.get('/getProducts/:uid', getProductsGet);
 
