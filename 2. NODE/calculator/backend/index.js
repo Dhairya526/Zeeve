@@ -27,6 +27,9 @@ const dbPool = promise_1.default.createPool({
 });
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
+app.get('/', (req, res) => {
+    res.send('hii');
+});
 app.get('/fetchHistory', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log('fetch history');
     try {
@@ -35,24 +38,32 @@ app.get('/fetchHistory', (req, res) => __awaiter(void 0, void 0, void 0, functio
         res.json(result);
     }
     catch (err) {
-        console.log(err);
+        console.log('err->', err);
     }
 }));
 app.post('/addToHistory', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log('add history');
     try {
+        console.log(req.body);
         const { expression, answer } = req.body;
-        const query = 'INSERT INTO calculator_1(expression, answer) VALUES (?,?);';
-        const rows = yield dbPool.query(query, [expression, answer]);
-        if (!Array.isArray(rows[0]) && rows[0].insertId > 0)
-            res.json({ success: true });
+        if (expression && answer) {
+            console.log(req.body);
+            const query = 'INSERT INTO calculator_1(expression, answer) VALUES (?,?);';
+            const result = yield dbPool.query(query, [expression, answer]);
+            if (!Array.isArray(result[0]) && result[0].insertId > 0)
+                res.status(201).json({ success: true });
+            else
+                res.status(501).json({ success: false });
+        }
         else
-            res.json({ success: false });
+            res.status(501).json({ success: false });
     }
     catch (err) {
-        console.log(err);
+        res.status(501).json({ success: false });
+        console.log('err->', err);
     }
 }));
 app.listen(5000, () => {
     console.log('listening on port 5000');
 });
+exports.default = app;
