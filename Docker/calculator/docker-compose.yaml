@@ -1,0 +1,41 @@
+version: '3.9'
+
+services: 
+    calculator-db:
+      image: mysql
+      restart: always
+      environment:
+        MYSQL_ROOT_PASSWORD: pass
+      ports:
+        - "3306:3306"
+      volumes:
+        - "./setup.sql:/docker-entrypoint-initdb.d/setup.sql"
+        - db:/var/lib/mysql
+      networks:
+        - calculator
+
+    calculator-be:
+      depends_on:
+        - calculator-db
+      build: ./backend
+      restart: unless-stopped
+      ports:
+        - "5000:5000"
+      networks:
+        - calculator
+
+    calculator-fe:
+      depends_on:
+        - calculator-be
+      build: ./frontend
+      restart: unless-stopped
+      ports:
+        - "3000:3000"
+      networks:
+        - calculator
+
+volumes:
+  db:
+
+networks:
+  calculator:
